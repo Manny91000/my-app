@@ -1,101 +1,109 @@
-import Image from "next/image";
+"use client"; // Esto convierte el archivo en un componente del cliente
 
-export default function Home() {
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { FormEvent, useState } from 'react';
+
+function Registro() {
+  const [formData, setFormData] = useState({
+    nombre: '',
+    email: '',
+    password: '',
+  });
+  const router = useRouter();
+
+  const [error, setError] = useState('');
+
+  // Manejar cambios en los input fields
+  // Manejar el error
+  // Manejar envío del formulario
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError('');
+    if (formData.password.length < 8) {
+      setError('La contraseña debe tener al menos 8 caracteres.');
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+      setError('El email no es válido.');
+      return;
+    }
+
+    // Validación básica
+    if (!formData.nombre || !formData.email || !formData.password) {
+      setError('Todos los campos son obligatorios.');
+      return;
+    }
+
+    // Simulación de envío de datos
+    console.log('Datos del formulario:', formData);
+    const response = await signIn('credentials', {
+      email: formData.email,
+      password: formData.password,
+        redirect: false, // No redireccionar después de iniciar sesión
+    } );
+
+    if ( response?.ok){
+     alert ('conexion satisfactoria')
+      router.push('/'); // Ir a la página de dashboard si la conexión fue satisfactoria
+    } else{
+      setError('response?.error');
+      return;
+    }
+
+    // Limpieza del formulario después de enviarlo
+    setFormData({
+      nombre: '',
+      email: '',
+      password: '',
+    });
+    alert('Registro exitoso');
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <form onSubmit={(e) => handleSubmit(e)}>
+      <div>
+        <label htmlFor="nombre">Nombre:</label>
+        <input
+          type="text"
+          id="nombre"
+          name="nombre"
+          onChange={(e) => setFormData({...formData, nombre: e.target.value})}
+          value={formData.nombre}
+          aria-label="Nombre"
+          placeholder="Ingresa tu nombre"
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </div>
+      <div>
+        <label htmlFor="email">Email:</label>
+        <input
+          type="email"
+          onChange={(e) => setFormData({...formData,  email: e.target.value})}
+          id="email"
+          name="email"
+          value={formData.email}
+          aria-label="Email"
+          placeholder="Ingresa tu email"
+        />
+      </div>
+      <div>
+        <label htmlFor="password">Contraseña:</label>
+        <input
+          type="password"
+          onChange={(e) => setFormData({...formData, password: e.target.value})}
+          id="password"
+          name="password"
+          value={formData.password}
+          aria-label="Contraseña"
+          placeholder="Ingresa tu contraseña"
+        />
+      </div>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <button type="submit" disabled={!formData.nombre || !formData.email || !formData.password}>
+        Registrarse
+      </button>
+    </form>
   );
 }
+
+export default Registro;

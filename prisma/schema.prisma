@@ -1,0 +1,144 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model VehicleType {
+  id          Int      @id @default(autoincrement())
+  description String
+  status      String
+  vehicles    Vehicle[]
+
+  @@index([description])
+}
+
+model Brand {
+  id          Int      @id @default(autoincrement())
+  description String
+  status      String
+  models      Model[]
+  vehicles    Vehicle[]
+
+  @@index([description])
+}
+
+model Model {
+  id        Int      @id @default(autoincrement())
+  brandId   Int
+  brand     Brand    @relation(fields: [brandId], references: [id])
+  description String
+  status    String
+  vehicles  Vehicle[]
+
+  @@index([description])
+}
+
+model FuelType {
+  id          Int      @id @default(autoincrement())
+  description String
+  status      String
+  vehicles    Vehicle[]
+
+  @@index([description])
+}
+
+model Vehicle {
+  id             Int      @id @default(autoincrement())
+  description    String
+  chassisNumber  String
+  engineNumber   String
+  plateNumber    String
+  vehicleTypeId  Int
+  vehicleType    VehicleType @relation(fields: [vehicleTypeId], references: [id])
+  brandId  Int
+  brand    Brand  @relation(fields: [brandId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  modelId  Int
+  model    Model  @relation(fields: [modelId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  fuelTypeId     Int
+  fuelType       FuelType @relation(fields: [fuelTypeId], references: [id])
+  status         String
+  rents          Rent[]
+  inspections    Inspection[]
+}
+
+model Customer {
+  id           Int      @id @default(autoincrement())
+  name         String
+  documentId   String   @unique // Customer Document Id
+  creditCard   String
+  creditLimit  Float
+  personType   String // "Física" o "Jurídica"
+  status       String
+  rents        Rent[]
+  inspections  Inspection[]
+}
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  employees    Employee[]
+}
+
+
+model Employee {
+  id            Int      @id @default(autoincrement())
+  name          String
+  documentId    String   @unique // Employee Document Id
+  workShift     String // "Matutina", "Vespertina", "Nocturna"
+  commissionPct Float
+  hireDate      DateTime @default(now())
+  status        String
+   roleId Int
+  role   Role   @relation(fields: [roleId], references: [id])
+  email         String   @unique // Employee Email
+  password      String   // Hashed Password
+  inspections   Inspection[]
+  rents         Rent[]
+}
+
+model Inspection {
+  id             Int      @id @default(autoincrement())
+  transactionId  Int
+  vehicleId      Int
+  vehicle        Vehicle  @relation(fields: [vehicleId], references: [id])
+  customerId     Int
+  customer       Customer @relation(fields: [customerId], references: [id])
+  scratches      Boolean
+  fuelAmount     String   // "1/4", "1/2", "3/4", "full"
+  hasSpareTire   Boolean
+  hasJack        Boolean
+  hasGlassDamage Boolean
+  tireStatus     String   // Información adicional de las llantas
+  inspectionDate DateTime @default(now())
+  employeeId     Int
+  employee       Employee @relation(fields: [employeeId], references: [id])
+  status         String
+}
+
+model Rent {
+  id            Int      @id @default(autoincrement())
+  employeeId    Int
+  employee      Employee @relation(fields: [employeeId], references: [id])
+  vehicleId     Int
+  vehicle       Vehicle  @relation(fields: [vehicleId], references: [id])
+  customerId    Int
+  customer      Customer @relation(fields: [customerId], references: [id])
+  rentDate      DateTime @default(now())
+  returnDate    DateTime
+  dailyRate     Float
+  days          Int
+  comments      String?
+  status        String
+
+  @@index([vehicleId])
+}
