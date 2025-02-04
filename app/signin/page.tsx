@@ -6,7 +6,7 @@ import { FormEvent, useState } from 'react';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({
-    nombre: '',
+    // nombre: '',
     email: '',
     password: '',
   });
@@ -30,7 +30,7 @@ export default function SignIn() {
     }
 
     // Validación básica
-    if (!formData.nombre || !formData.email || !formData.password) {
+    if ( !formData.email || !formData.password) {
       setError('Todos los campos son obligatorios.');
       return;
     }
@@ -53,7 +53,7 @@ export default function SignIn() {
 
     // Limpieza del formulario después de enviarlo
     setFormData({
-      nombre: '',
+      // nombre: '',
       email: '',
       password: '',
     });
@@ -62,10 +62,17 @@ export default function SignIn() {
 
   return (
     <form onSubmit={(e) => handleSubmit(e)} className='min-h-screen grid place-items-center'>
-      <div className='bg-black'>
-      <div>
+      <div className='max-w-2xl p-6 border rounded '>
+        <h1 className='text-3xl font-bold text-center mb-4'>Inicio</h1>
+        <p>
+          Inicia sesión para acceder a tus datos y registrarse en nuestra pagina de renta
+          de autos.
+        </p>
+        <br>
+        </br>
+      {/* <div className = 'grid gap-3'>
         <label htmlFor="nombre">Nombre:</label>
-        <input
+        <input className='py-2 px-3 rounded border' 
           type="text"
           id="nombre"
           name="nombre"
@@ -74,10 +81,11 @@ export default function SignIn() {
           aria-label="Nombre"
           placeholder="Ingresa tu nombre"
         />
-      </div>
-      <div>
+      </div> */}
+      <br></br>
+      <div  className = 'grid gap-3'>
         <label htmlFor="email">Email:</label>
-        <input
+        <input className='py-2 px-3 rounded border' 
           type="email"
           onChange={(e) => setFormData({...formData,  email: e.target.value})}
           id="email"
@@ -87,9 +95,10 @@ export default function SignIn() {
           placeholder="Ingresa tu email"
         />
       </div>
-      <div>
+      <br></br>
+      <div className = 'grid gap-3'>
         <label htmlFor="password">Contraseña:</label>
-        <input
+        <input className='py-2 px-3 rounded border' 
           type="password"
           onChange={(e) => setFormData({...formData, password: e.target.value})}
           id="password"
@@ -99,11 +108,14 @@ export default function SignIn() {
           placeholder="Ingresa tu contraseña"
         />
       </div>
+      <br></br>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <button type="submit" disabled={!formData.nombre || !formData.email || !formData.password}>
+      <button className='w-full py-2.5 bg-black rounded-sm text-white'  type="submit">
         Registrarse
       </button>
       </div>
     </form>
   );
 }
+
+
