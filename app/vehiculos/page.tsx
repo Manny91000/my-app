@@ -15,22 +15,12 @@ export default function page() {
         {/* Ejemplo: */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="bg-gray-200 p-4 rounded-lg shadow">
-            <img
-              src="https://via.placeholder.com/300x200" // Reemplaza con la URL de la imagen del vehículo
-              alt="Vehículo 1"
-              className="w-full rounded-lg mb-4"
-            />
             <h2 className="text-xl font-medium mb-2 text-gray-800">
               Vehículo 1
             </h2>
             <p className="text-gray-600">Descripción del vehículo 1.</p>
           </div>
           <div className="bg-gray-200 p-4 rounded-lg shadow">
-            <img
-              src="https://via.placeholder.com/300x200" // Reemplaza con la URL de la imagen del vehículo
-              alt="Vehículo 2"
-              className="w-full rounded-lg mb-4"
-            />
             <h2 className="text-xl font-medium mb-2 text-gray-800">
               Vehículo 2
             </h2>
