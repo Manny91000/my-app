@@ -28,6 +28,7 @@ export default function page() {
               <p className="text-gray-600">
                 Administra la lista de usuarios, sus roles y permisos.
               </p>
+
           </li>
           <li className="bg-gray-200 p-6 rounded-lg shadow hover:bg-gray-300 transition duration-300">
           

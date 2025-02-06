@@ -16,19 +16,71 @@ export default function page() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="bg-gray-200 p-4 rounded-lg shadow">
             <h2 className="text-xl font-medium mb-2 text-gray-800">
-              Vehículo 1
+              Vehículo 1 Nissan
             </h2>
-            <p className="text-gray-600">Descripción del vehículo 1.</p>
+            <p className="text-gray-600"></p>
+            <p>
+              Nissan GT-R
+              Tipo: SUV compacto
+              Motor:V6
+              2.0L gasolina de 180 CV o 210 CV
+            </p>
+            <button className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Detalles del precio
+              <span className="ml-2 text-sm font-bold text-white-600">
+                $12,000
+              </span>
+            </button>
+            {/* Agrega más botones de acción aquí */}
+           </div>
+          </div>
+          <div className="bg-gray-200 p-4 rounded-lg shadow">
+            <h2 className="text-xl font-medium mb-2 text-white-800">
+              Vehículo 2 Honda
+            </h2>
+            <p className="text-gray-600"></p>
+            <p>
+              Honda CR-V
+              Tipo: SUV compacto
+              Motor:1.5 VTEC turbo
+              1.8L gasolina de 140 CV o 160 CV
+            </p>
+            <button className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Detalles del precio
+              <span className="ml-2 text-sm font-bold text-white-600">
+                $15,000
+              </span>
+            </button>
+          </div>
+          {/* Agrega más contenedores de vehículo aquí */}
+          <div className="bg-gray-200 p-4 rounded-lg shadow">
+            <h2 className="text-xl font-medium mb-2 text-gray-800">
+              Vehículo 3 Toyota
+            </h2>
+            <p className="text-gray-600"></p>
+            <p>
+              Toyota Highlander
+              Tipo: SUV compacto
+              Motor:1.8 V6 turbo
+              2.0L gasolina de 180 CV o 210 CV
+            </p>
+            <button className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Detalles del precio
+              <span className="ml-2 text-sm font-bold text-white-600">
+                $18,000
+              </span>
+            </button>
           </div>
           <div className="bg-gray-200 p-4 rounded-lg shadow">
             <h2 className="text-xl font-medium mb-2 text-gray-800">
-              Vehículo 2
+              Vehículo 4 ford
             </h2>
-            <p className="text-gray-600">Descripción del vehículo 2.</p>
-          </div>
-          {/* Agrega más vehículos aquí */}
+            <p className='text-red-100'>
+              Este vehículo está en venta en promoción!
+              
+            </p>
+        </div>
         </div>
       </div>
-    </div>
   )
 }
