@@ -58,6 +58,11 @@ const items = [
     url: "/dashboard/inspecciones",
     icon: Calendar,
   },
+  {
+    title: "Reportes",
+    url: "/dashboard/reportes",
+    icon: Calendar,
+  }
 ]
 
 export function AppSidebar() {
