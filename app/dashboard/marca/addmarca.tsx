@@ -31,7 +31,7 @@ export function AddMarca() {
     
     const onSubmit = async (data: MarcaSchemaForm) => {
         try {
-            const response = await fetch("/api/marca", {
+            const response = await fetch("/api/marca/crear", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',

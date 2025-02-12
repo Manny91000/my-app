@@ -32,9 +32,9 @@ import { AddMarca } from './addmarca';
                     {marcas.map((marca) => (
                         <tr key={marca.id}>
                         
-                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 "> Louis Vuitton</td>
-                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> 20010510 </td>
-                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> Accessories</td>
+                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 ">{marca.id}</td>
+                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{marca.description}</td>
+                        <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{marca.status}</td>
                     </tr>
                     ))}
                 </tbody>

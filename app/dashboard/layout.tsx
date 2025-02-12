@@ -1,8 +1,18 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarHeader,
+} from "@/components/ui/sidebar"
+import { Toaster } from "@/components/ui/toaster"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
+
+      <Toaster /> 
       <AppSidebar />
       <main className="p-8 w-full bg-gray">
         <SidebarTrigger/>
@@ -14,13 +24,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     </SidebarProvider>
   )
 }
-import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarGroup,
-    SidebarHeader,
-  } from "@/components/ui/sidebar"
   
   export function AppSidebar() {
     return (
