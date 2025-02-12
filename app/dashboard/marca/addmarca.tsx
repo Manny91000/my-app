@@ -1,17 +1,33 @@
+'use client'
+
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { marcaSchema, MarcaSchemaForm } from "@/lib/form/marca";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form"
 
 export function AddMarca() {
+    const form  = useForm<MarcaSchemaForm>({
+        resolver: zodResolver(marcaSchema),
+        defaultValues: {
+          description: "",
+          status: "",
+        },
+    });
+    
+    const onSubmit = (data: MarcaSchemaForm) => {
+        console.log(data)
+    }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -24,23 +40,44 @@ export function AddMarca() {
            Llenar para agregar una nueva marca
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input id="name" value="Pedro Duarte" className="col-span-3" />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Username
-            </Label>
-            <Input id="username" value="@peduarte" className="col-span-3" />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter>
+
+         <Form {...form}>
+         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+        <FormField
+        control={form.control} 
+        name="description"
+        render={({field}) => (
+            <FormItem>
+                <FormLabel>
+                    Descripción
+                </FormLabel>
+                <FormControl>
+                    <Input {...field} placeholder="Descripción de la marca" />
+                </FormControl>
+                <FormMessage />
+            </FormItem>
+        )}
+        />
+
+<FormField
+        control={form.control} 
+        name="status"
+        render={({field}) => (
+            <FormItem>
+                <FormLabel>
+                    Estado
+                </FormLabel>
+                <FormControl>
+                    <Input {...field} placeholder="Estado de la marca" />
+                </FormControl>
+                <FormMessage />
+            </FormItem>
+        )}
+        />
+
+        <Button type="submit">Añadir marca</Button>
+         </form>
+         </Form>
       </DialogContent>
     </Dialog>
   )
