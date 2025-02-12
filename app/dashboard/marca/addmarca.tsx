@@ -11,11 +11,16 @@ import {
 } from "@/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input"
+import { toast } from "@/hooks/use-toast";
 import { marcaSchema, MarcaSchemaForm } from "@/lib/form/marca";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form"
 
 export function AddMarca() {
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+
+
     const form  = useForm<MarcaSchemaForm>({
         resolver: zodResolver(marcaSchema),
         defaultValues: {
@@ -24,12 +29,41 @@ export function AddMarca() {
         },
     });
     
-    const onSubmit = (data: MarcaSchemaForm) => {
-        console.log(data)
+    const onSubmit = async (data: MarcaSchemaForm) => {
+        try {
+            const response = await fetch("/api/marca", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const {message} = await response.json();
+
+            if (!response.ok) {
+                throw new Error(message);
+            }
+
+            setIsOpen(false);
+            console.log("Marca agregada con éxito");
+            toast({
+                title: "Marca Agregada",
+                description: "La marca ha sido agregada correctamente",
+            })
+        } catch (error) {
+        toast({
+
+            variant: 'destructive',
+                title: "Error al agregar Marca",
+                description: (error as Error).message
+            })
+
+        }
     }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Añadir Marca</Button>
       </DialogTrigger>
