@@ -6,16 +6,16 @@
         // pagina para presentar datos de las marcas en tablas.
         export default async function page() {
             // datos de las marcas
-            const alquiler = await prisma.rent.findMany();
             const empleados = await prisma.employee.findMany();
             const clientes = await prisma.customer.findMany();
             const vehiculos = await prisma.vehicle.findMany();
+            const inspecciones = await prisma.inspection.findMany();
             
     
           return (
             <div className='w-full space-y-4'> 
                 <div className='flex items-center justify-between'>
-                <h1 className='text-xl font-bold'>Lista de los alquileres</h1>
+                <h1 className='text-xl font-bold'>Lista de inspecciones</h1>
                
                 </div>
               
@@ -32,29 +32,34 @@
                             <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Estado</th>
                             <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Vehiculo</th>
                             <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Cliente</th>
-                            <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Dia de renta</th>
-                            <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Dia de retorno</th>
-                            <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Comentario</th>
-                            <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Dia</th>
-                            <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Diario</th>
-                            <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Acciones</th>
+                            <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Choques</th>
+                            <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Cantidad de combustible</th>
+                            <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Daño de goma</th>
+                            <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Robo</th>
+                            <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Daño de vidrio</th>
+                            <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Daño de goma</th>
+                            <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Inspeccion</th>
+                            <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize">Acciones</th>
                             
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-300 ">
-                        {alquiler.map((alquiler) => (
-                            <tr key={alquiler.id}>
+                        {inspecciones.map((inspeccion) => (
+                            <tr key={inspeccion.id}>
                             
-                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 ">{alquiler.id}</td>
-                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{empleados.find(empleado => empleado.id === alquiler.employeeId)?.name}</td>
-                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.status}</td>
-                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{vehiculos.find(vehiculo => vehiculo.id === alquiler.vehicleId)?.description}</td>
-                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{clientes.find(cliente => cliente.id === alquiler.customerId)?.name}</td>
-                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.rentDate.toLocaleString()}</td>
-                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.returnDate.toLocaleString()}</td>
-                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.comments}</td>
-                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.days}</td>
-                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.dailyRate}</td>
+                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 ">{inspeccion.id}</td>
+                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{empleados.find(empleado => empleado.id === inspeccion.employeeId)?.name}</td>
+                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.inspectionDate.toLocaleString()}</td>
+                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{vehiculos.find(vehiculo => vehiculo.id === inspeccion.vehicleId)?.description}</td>
+                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{clientes.find(cliente => cliente.id === inspeccion.customerId)?.name}</td>
+                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.scratches}</td>
+                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.fuelAmount}</td>
+                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.hasSpareTire}</td>
+                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.hasGlassDamage}</td>
+                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.hasJack}</td>
+                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.hasGlassDamage}</td>
+                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.hasSpareTire}</td>
+
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
                             </td>
                         </tr>
