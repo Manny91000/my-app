@@ -2,6 +2,7 @@
    
     import { prisma } from '@/prisma/prisma.config'
     import React from 'react'
+     import BorraraAlquiler  from './borraralquiler';
         
         // pagina para presentar datos de las marcas en tablas.
         export default async function page() {
@@ -56,12 +57,14 @@
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.days}</td>
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.dailyRate}</td>
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
+                                <BorraraAlquiler alquilerId = {alquiler.id} />
                             </td>
                         </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+            
         </div>
     </div>
     </div>

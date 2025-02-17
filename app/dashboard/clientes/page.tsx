@@ -1,6 +1,7 @@
-  
-    import { prisma } from '@/prisma/prisma.config'
+
+import { prisma } from '@/prisma/prisma.config'
     import React from 'react'
+    import BorraraClientes from './borraraclientes';
         
         // pagina para presentar datos de las marcas en tablas.
         export default async function page() {
@@ -12,7 +13,6 @@
             <div className='w-full space-y-4'> 
                 <div className='flex items-center justify-between'>
                 <h1 className='text-xl font-bold'>Lista de clientes</h1>
-               
                 </div>
               
     
@@ -46,6 +46,7 @@
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{cliente.personType}</td>
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{cliente.status}</td>
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
+<BorraraClientes clientesId={cliente.id} />
                             </td>
                         </tr>
                         ))}
