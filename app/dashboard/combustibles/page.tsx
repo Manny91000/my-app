@@ -1,6 +1,7 @@
    
-    import { prisma } from '@/prisma/prisma.config'
+import { prisma } from '@/prisma/prisma.config'
     import React from 'react'
+    import BorrarCombustible from './borraracombustibles';
         
         // pagina para presentar datos de las marcas en tablas.
         export default async function page() {
@@ -36,6 +37,7 @@
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{combustible.description}</td>
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{combustible.status}</td>
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
+                                <BorrarCombustible combustibleId={combustible.id} />
                             </td>
                         </tr>
                         ))}
