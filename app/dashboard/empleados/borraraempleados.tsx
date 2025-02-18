@@ -40,7 +40,7 @@ export default function BorrarEmpleados({ empleadoId }: { empleadoId: number }) 
             Cancelar
         </DialogClose>
 
-        <Button onClick={borraraempleados}
+        <Button onClick={BorraraEmpleados}
         >
             Eliminar
         </Button>

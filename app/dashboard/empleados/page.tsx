@@ -52,7 +52,12 @@
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{roles.find(rol => rol.id === empleado.roleId)?.name}</td>
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{empleado.email}</td>
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
-                            <BorrarEmpleados empleadosId={empleados.id} />
+<button 
+  onClick={() => console.log(`Delete employee ${empleado.id}`)}
+  className="text-red-600 hover:text-red-800"
+>
+  Delete
+</button>
                             </td>
                         </tr>
                         ))}

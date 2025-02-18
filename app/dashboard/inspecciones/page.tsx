@@ -2,6 +2,7 @@
    
     import { prisma } from '@/prisma/prisma.config'
     import React from 'react'
+// Remove unused import since BorraraInspecciones is not being used in this file
         
         // pagina para presentar datos de las marcas en tablas.
         export default async function page() {
@@ -61,6 +62,13 @@
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.hasSpareTire}</td>
 
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
+                            <button 
+onClick={() => console.log(`Delete inspection ${inspeccion.id}`)}
+  className="text-red-600 hover:text-red-800"
+>
+  Delete
+</button>
+           
                             </td>
                         </tr>
                         ))}

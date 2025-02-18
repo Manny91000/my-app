@@ -36,6 +36,12 @@
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{modelo.description}</td>
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{modelo.status}</td>
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
+<button 
+  onClick={() => console.log(`Delete model ${modelo.id}`)}
+  className="text-red-600 hover:text-red-800"
+>
+  Delete
+</button>
                             </td>
                         </tr>
                         ))}

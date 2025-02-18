@@ -58,6 +58,12 @@
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{combustible.find(combustible => combustible.id === vehiculo.fuelTypeId)?.description}</td>
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{vehiculo.status}</td>
                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
+<button 
+  onClick={() => console.log(`Delete vehicle with ID: ${vehiculo.id}`)}
+  className="text-red-600 hover:text-red-800"
+>
+  Delete
+</button>
                             </td>
                         </tr>
                         ))}
