@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -13,14 +13,44 @@ import {
   } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button'
 import { DialogClose } from '@radix-ui/react-dialog'
+import { toast } from '@/hooks/use-toast'
   
 export default function BorraraTipoDeVehiculo({ tipodevehiculoId }: { tipodevehiculoId: number }) {
-    const BorraraTipoDeVehiculo = () => {
-        console.log(tipodevehiculoId);
-        
-    }
+       const [isOpen, setIsOpen ] = useState (false);
+
+           const onSubmit = async () => {
+      try {
+          const response = await fetch("/api/tipodevehiculo/eliminar?id=" + tipodevehiculoId,{
+              method: "DELETE",
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+          });
+
+          const {message} = await response.json();
+
+          if (!response.ok) {
+              throw new Error(message);
+          }
+
+          setIsOpen(false);
+          console.log("Tipo de vehiculo agregado con éxito");
+          toast({
+              title: "Tipo De Vehiculo Agregado",
+              description: "El tipo de vehiculo ha sido agregada correctamente",
+          })
+      } catch (error) {
+      toast({
+
+          variant: 'destructive',
+              title: "Error al agregar Tipo De Vehiculo",
+              description: (error as Error).message
+          })
+
+      }
+  }
   return (
-      <Dialog>
+      <Dialog open = {isOpen } onOpenChange={setIsOpen}>
   <DialogTrigger asChild>
     <Button variant='outline'>
         Elmininar inspecciones
@@ -40,7 +70,7 @@ export default function BorraraTipoDeVehiculo({ tipodevehiculoId }: { tipodevehi
             Cancelar
         </DialogClose>
 
-        <Button onClick={BorraraTipoDeVehiculo}
+        <Button onClick={onSubmit}
         >
             Eliminar
         </Button>

@@ -3,6 +3,7 @@
     import { prisma } from '@/prisma/prisma.config'
     import React from 'react'
      import BorraraAlquiler  from './borraralquiler';
+import { AddAlquiler } from './addalquiler';
         
         // pagina para presentar datos de las marcas en tablas.
         export default async function page() {
@@ -17,7 +18,7 @@
             <div className='w-full space-y-4'> 
                 <div className='flex items-center justify-between'>
                 <h1 className='text-xl font-bold'>Lista de los alquileres</h1>
-               
+               <AddAlquiler />
                 </div>
               
     

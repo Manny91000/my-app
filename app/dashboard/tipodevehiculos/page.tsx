@@ -2,6 +2,7 @@
     import { prisma } from '@/prisma/prisma.config'
     import React from 'react'
 import BorraraTipoDeVehiculo from './borraratipodevehiculos';
+import { AddTipoDeVehiculos } from './addtipodevehiculos';
         
         // pagina para presentar datos de las marcas en tablas.
         export default async function page() {
@@ -12,7 +13,7 @@ import BorraraTipoDeVehiculo from './borraratipodevehiculos';
             <div className='w-full space-y-4'> 
                 <div className='flex items-center justify-between'>
                 <h1 className='text-xl font-bold'>Listado de tipo de vehiculos</h1>
-       
+               <AddTipoDeVehiculos />
                 </div>
               
     
