@@ -14,18 +14,20 @@ import {
 import { Button } from '@/components/ui/button'
 import { DialogClose } from '@radix-ui/react-dialog'
 import { toast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
   
 export default function BorraraTipoDeVehiculo({ tipodevehiculoId }: { tipodevehiculoId: number }) {
        const [isOpen, setIsOpen ] = useState (false);
-
+       const router = useRouter ();
+       
            const onSubmit = async () => {
       try {
-          const response = await fetch("/api/tipodevehiculo/eliminar?id=" + tipodevehiculoId,{
+          const response = await fetch(`/api/tipodevehiculo/eliminar?id=${tipodevehiculoId}`,{
               method: "DELETE",
               headers: {
                   'Content-Type': 'application/json',
               },
-          });
+          }); 
 
           const {message} = await response.json();
 
@@ -39,7 +41,9 @@ export default function BorraraTipoDeVehiculo({ tipodevehiculoId }: { tipodevehi
               title: "Tipo De Vehiculo Agregado",
               description: "El tipo de vehiculo ha sido agregada correctamente",
           })
+          router.refresh();
       } catch (error) {
+        console.log(error);
       toast({
 
           variant: 'destructive',
