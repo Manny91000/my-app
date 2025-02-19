@@ -4,10 +4,10 @@ import { prisma } from "@/prisma/prisma.config";
 export async function PUT(req: Request) {
     try {
         const body = await req.json();
+        const { id, ...data } = body;
 
-        await prisma.brand.update({
-            where: { id: body.id },
-            data: body,
+        await prisma.rent.update({
+            where: { id }, data
         });
 
         return NextResponse.json({
@@ -21,3 +21,4 @@ export async function PUT(req: Request) {
         }, { status: 500 });
     }
 }
+

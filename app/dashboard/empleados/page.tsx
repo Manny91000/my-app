@@ -3,6 +3,7 @@ import { prisma } from '@/prisma/prisma.config'
 import React from 'react'
 import BorrarEmpleado from './borraraempleados';    
 import { AddEmpleado } from './addempleados';
+import { ActualizarEmpleado } from './actualizarempleado';
 
 export default async function page() {
 // datos de las marcas
@@ -51,6 +52,8 @@ export default async function page() {
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{roles.find(rol => rol.id === empleado.roleId)?.name}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{empleado.email}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
+                                                <ActualizarEmpleado empleado={empleado} roles={roles} />
+                                                
                                                 <BorrarEmpleado empleadoId={empleado.id} />
                                             </td>
                                         </tr>

@@ -1,0 +1,277 @@
+'use client'
+
+import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, 
+    SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input"
+import { toast } from "@/hooks/use-toast";
+import { empleadoSchema, EmpleadoSchemaForm } from "@/lib/form/empleados";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form"
+import { Employee, Role } from "@prisma/client";
+
+export function ActualizarEmpleado({
+    roles,
+    empleado
+}: {
+        roles: Role[],
+    empleado: Employee,
+}) {
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
+
+    const form = useForm<EmpleadoSchemaForm>({
+        resolver: zodResolver(empleadoSchema),
+        defaultValues: {
+            id: empleado.id,
+            name: empleado.name, email: empleado.email, password: empleado.password, workShift: empleado.workShift,
+            status: empleado.status, documentId: empleado.documentId, hireDate: empleado.hireDate,
+            roleId: empleado.roleId, commissionPct: empleado.commissionPct
+        },
+    });
+    
+    const onSubmit = async (data: EmpleadoSchemaForm) => {
+        try {
+            setIsLoading(true);
+
+            const response = await fetch("/api/empleado/actualizar", {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const { message } = await response.json();
+
+            if (!response.ok) {
+                throw new Error(message);
+            }
+
+            setIsOpen(false);
+            console.log("Empleado actualizado con éxito");
+            toast({
+                title: "Actualizar Empleado",
+                description: "La Empleado ha sido actualizado correctamente",
+            });
+
+            router.refresh();
+        } catch (error) {
+            toast({
+                variant: 'destructive',
+                title: "Error al actualizar Empleado",
+                description: (error as Error).message
+            })
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    return (
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger asChild>
+                <Button variant="outline">Actualizar</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[625px] lg:max-w-[825px]">
+                <DialogHeader>
+                    <DialogTitle>Actualizar Empleado</DialogTitle>
+                    <DialogDescription>
+                        Llenar para actualizar este Empleado
+                    </DialogDescription>
+                </DialogHeader>
+
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                        <div className="grid md:grid-cols-2 gap-5">
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Nombre</FormLabel>
+                                        <FormControl>
+                                            <Input autoComplete='additional-name' type="text" placeholder="ex: Juan Perez" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Correo Electrónico</FormLabel>
+                                        <FormControl>
+                                            <Input autoComplete='additional-name' type="email" placeholder="ex: juanperez@gmail.com" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="documentId"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Documento</FormLabel>
+                                        <FormControl>
+                                            <Input type="text" placeholder="ex: 00100759932" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="workShift"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Horario de Trabajo</FormLabel>
+                                        <FormControl>
+                                            <Select
+                                                {...field}
+                                                value={field.value}
+                                                onValueChange={(value) => field.onChange(value)}
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Selecciona un horario de trabajo" />
+                                                </SelectTrigger>
+
+                                                <SelectContent>
+                                                    <SelectItem value="Diurna">Diurna</SelectItem>
+                                                    <SelectItem value="Nocturna">Nocturna</SelectItem>
+                                                    <SelectItem value="Mixta">Mixta</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="status"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Estado</FormLabel>
+                                        <FormControl>
+                                            <Select
+                                                {...field}
+                                                value={field.value}
+                                                onValueChange={(value) => field.onChange(value)}
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Selecciona un estado" />
+                                                </SelectTrigger>
+
+                                                <SelectContent>
+                                                    <SelectItem value="Activo">Activo</SelectItem>
+                                                    <SelectItem value="Inactivo">Inactivo</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="hireDate"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Fecha de Contratación</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="date"
+                                                placeholder="dd/mm/aaaa"
+                                                {...field}
+                                                value={field.value ? new Date(field.value).toISOString().split("T")[0] : ""}
+                                                onChange={(event) => field.onChange(new Date(event.target.value))}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="roleId"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Rol</FormLabel>
+                                        <FormControl>
+                                            <Select
+                                                {...field}
+                                                value={field.value.toString()}
+                                                onValueChange={(value) => field.onChange(parseInt(value, 10))}
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Selecciona un rol" />
+                                                </SelectTrigger>
+
+                                                <SelectContent>
+                                                    {roles.map((role) => (
+                                                        <SelectItem
+                                                            key={role.id}
+                                                            value={role.id.toString()}
+                                                        >
+                                                            {role.name}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="commissionPct"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Comisión</FormLabel>
+                                        <FormControl>
+                                            <Input type="number" placeholder="ex: 0.00"
+                                                {...field}
+                                                value={field.value ? Number(field.value) : 0}
+                                                onChange={(event) => field.onChange(Number(event.target.value))}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
+
+                        <Button type="submit">
+                            {isLoading ? <Loader className='mr-2 h-4 w-4 animate-spin' /> : 'Actualizar Empleado'}
+                        </Button>
+                    </form>
+                </Form>
+            </DialogContent>
+        </Dialog>
+    );
+}
+

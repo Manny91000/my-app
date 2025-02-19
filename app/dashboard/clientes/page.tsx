@@ -3,6 +3,7 @@ import { prisma } from '@/prisma/prisma.config'
 import React from 'react'
 import { AddCliente } from './addclientes';
 import BorrarCliente from './borraraclientes';
+import { ActualizarCliente } from './actualizarcliente';
         
 export default async function page() {
 // datos de las marcas
@@ -48,6 +49,8 @@ const clientes = await prisma.customer.findMany();
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{cliente.personType}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{cliente.status}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
+                                                <ActualizarCliente cliente={cliente} />
+                                                
                                                 <BorrarCliente clienteId={cliente.id} />
                                             </td>
                                         </tr>

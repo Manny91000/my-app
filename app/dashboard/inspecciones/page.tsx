@@ -3,6 +3,7 @@ import { prisma } from '@/prisma/prisma.config'
 import React from 'react'
 import BorrarInspection from './borrarainspecciones';
 import { AddInspection } from './addinspecciones';
+import { ActualizarInspeccion } from './actualizarinspeccion';
 
 export default async function page() {
     // datos de las marcas
@@ -60,6 +61,8 @@ export default async function page() {
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.hasSpareTire}</td>
 
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
+                                                <ActualizarInspeccion vehiculos={vehiculos} clientes={clientes} empleados={empleados} inspeccion={inspeccion} />
+                                                
                                                 <BorrarInspection inspectionId={inspeccion.id} />
                                             </td>
                                         </tr>

@@ -3,6 +3,7 @@ import { prisma } from '@/prisma/prisma.config'
 import React from 'react'
 import BorrarVehiculo from './borraravehiculos';
 import { AddVehiculo } from './addvehiculos';
+import { ActualizarVehiculo } from './actualizarvehiculo';
 
 export default async function page() {
     const vehiculos = await prisma.vehicle.findMany();
@@ -55,6 +56,8 @@ export default async function page() {
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{combustibles.find(combustible => combustible.id === vehiculo.fuelTypeId)?.description}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{vehiculo.status}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
+                                                <ActualizarVehiculo marcas={marcas} modelos={modelos} tipodevehiculos={tipodevehiculos} combustibles={combustibles} vehiculo={vehiculo} />
+                                                
                                                 <BorrarVehiculo vehiculoId={vehiculo.id} />
                                             </td>
                                         </tr>

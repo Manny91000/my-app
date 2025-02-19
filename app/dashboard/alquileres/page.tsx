@@ -3,6 +3,7 @@ import { prisma } from '@/prisma/prisma.config'
 import React from 'react'
 import { AddAlquiler } from './addalquiler';
 import BorrarAlquiler from './borraralquiler';
+import { ActualizarAlquiler } from './actualizaralquiler';
 
 export default async function page() {
     // datos de las marcas
@@ -48,12 +49,14 @@ export default async function page() {
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.status}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{vehiculos.find(vehiculo => vehiculo.id === alquiler.vehicleId)?.description}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{clientes.find(cliente => cliente.id === alquiler.customerId)?.name}</td>
-                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.rentDate.toLocaleString()}</td>
-                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.returnDate.toLocaleString()}</td>
+                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.rentDate.toLocaleDateString()}</td>
+                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.returnDate.toLocaleDateString()}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.comments}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.days}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.dailyRate}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
+                                                <ActualizarAlquiler vehiculo={alquiler} vehiculos={vehiculos} clientes={clientes} empleados={empleados} />
+                                                
                                                 <BorrarAlquiler alquilerId={alquiler.id} />
                                             </td>
                                         </tr>
@@ -61,11 +64,10 @@ export default async function page() {
                                 </tbody>
                             </table>
                         </div>
-    
                     </div>
                 </div>
             </div>
         </div>
     );
 }
-    
+
