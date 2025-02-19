@@ -3,6 +3,7 @@
     import React from 'react'
 import BorraraTipoDeVehiculo from './borraratipodevehiculos';
 import { AddTipoDeVehiculos } from './addtipodevehiculos';
+import { ActualizarTipoDeVehiculo } from './actualizartipodevehiculo';
         
         // pagina para presentar datos de las marcas en tablas.
 export default async function page() {
@@ -39,6 +40,8 @@ export default async function page() {
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{tipodevehiculo.description}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{tipodevehiculo.status}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
+                                                <ActualizarTipoDeVehiculo tipodevehiculo={tipodevehiculo} />
+
                                                 <BorraraTipoDeVehiculo tipodevehiculoId={tipodevehiculo.id} />
                                             </td>
                                         </tr>

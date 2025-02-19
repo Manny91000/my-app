@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -13,36 +12,36 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input"
 import { toast } from "@/hooks/use-toast";
-import { modeloSchema, ModeloSchemaForm } from "@/lib/form/modelos";
+import { combustibleSchema, CombustibleSchemaForm } from "@/lib/form/combustibles";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Brand } from "@prisma/client";
+import { FuelType } from "@prisma/client";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form"
 
-export function AddModelo({
-    marcas
-}: { marcas: Brand[] }) {
+export function ActualizarCombustible({
+    combustible
+}: { combustible: FuelType }) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
-    const form = useForm<ModeloSchemaForm>({
-        resolver: zodResolver(modeloSchema),
+    const form  = useForm<CombustibleSchemaForm>({
+        resolver: zodResolver(combustibleSchema),
         defaultValues: {
-            description: "",
-            brandId: 0,
-            status: "",
+         id: combustible.id,
+          description: combustible.description,
+          status: combustible.status,
         },
     });
     
-    const onSubmit = async (data: ModeloSchemaForm) => {
+    const onSubmit = async (data: CombustibleSchemaForm) => {
         try {
             setIsLoading(true);
 
-            const response = await fetch("/api/modelos/crear", {
-                method: "POST",
+            const response = await fetch("/api/combustible/actualizar", {
+                method: "PUT",
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -56,21 +55,19 @@ export function AddModelo({
             }
 
             setIsOpen(false);
-            console.log("Modelo agregada con éxito");
+            console.log("Combustible actualizada con éxito");
             toast({
-                title: "Modelo Agregada",
-                description: "La Modelo ha sido agregada correctamente",
+                title: "Actualizar Combustible",
+                description: "El Combustible ha sido actualizado correctamente",
             });
 
             router.refresh();
         } catch (error) {
             toast({
                 variant: 'destructive',
-                title: "Error al agregar Modelo",
+                title: "Error al actualizar Combustible",
                 description: (error as Error).message
-            });
-
-            console.log(error);
+            })
         } finally {
             setIsLoading(false);
         }
@@ -79,13 +76,13 @@ export function AddModelo({
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline">Añadir Modelo</Button>
+                <Button variant="outline">Actualizar</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Añadir Modelo</DialogTitle>
+                    <DialogTitle>Actualizar Combustible</DialogTitle>
                     <DialogDescription>
-                        Llenar para agregar un nuevo modelo
+                        Llenar para actualizar una nueva Combustible
                     </DialogDescription>
                 </DialogHeader>
 
@@ -100,41 +97,7 @@ export function AddModelo({
                                         Descripción
                                     </FormLabel>
                                     <FormControl>
-                                        <Input {...field} placeholder="Descripción de la Modelo" />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="brandId"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>
-                                        Marca
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Select {...field}
-                                            value={field.value === undefined ? "" : field.value.toString()}
-                                            onValueChange={(value) => field.onChange(parseInt(value, 10))}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Selecciona una marca" />
-                                            </SelectTrigger>
-
-                                            <SelectContent>
-                                                {marcas.map((marca) => (
-                                                    <SelectItem
-                                                        key={marca.id}
-                                                        value={marca.id.toString()}
-                                                    >
-                                                        {marca.description}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                        <Input {...field} placeholder="Descripción de la Combustible" />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -150,7 +113,7 @@ export function AddModelo({
                                         Estado
                                     </FormLabel>
                                     <FormControl>
-                                        <Input {...field} placeholder="Estado de la Modelo" />
+                                        <Input {...field} placeholder="Estado de la Combustible" />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -158,7 +121,7 @@ export function AddModelo({
                         />
 
                         <Button type="submit">
-                            {isLoading ? <Loader className='mr-2 h-4 w-4 animate-spin' /> : 'Añadir Modelo'}
+                            {isLoading ? <Loader className='mr-2 h-4 w-4 animate-spin' /> : 'Actualizar Combustible'}
                         </Button>
                     </form>
                 </Form>
@@ -166,3 +129,4 @@ export function AddModelo({
         </Dialog>
     );
 }
+

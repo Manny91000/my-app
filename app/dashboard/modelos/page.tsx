@@ -3,6 +3,7 @@ import { prisma } from '@/prisma/prisma.config'
 import React from 'react'
 import BorrarModelo from './borraramodelos';
 import { AddModelo } from './addmodelos';
+import { ActualizarModelo } from './actualizarmodelo';
 
 export default async function page() {
     // datos de las marcas
@@ -39,6 +40,8 @@ export default async function page() {
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{modelo.description}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{modelo.status}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
+                                                <ActualizarModelo modelo={modelo} marcas={marcas} />
+                                                
                                                 <BorrarModelo modeloId={modelo.id} />
                                             </td>
                                         </tr>

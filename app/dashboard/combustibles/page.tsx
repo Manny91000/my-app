@@ -3,6 +3,7 @@ import { prisma } from '@/prisma/prisma.config'
     import React from 'react'
     import BorrarCombustible from './borraracombustibles';
 import { AddCombustible } from './addcombustibles';
+import { ActualizarCombustible } from './actualizarcombustible';
         
         export default async function page() {
             // datos de las marcas
@@ -38,6 +39,8 @@ import { AddCombustible } from './addcombustibles';
                                                     <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{combustible.description}</td>
                                                     <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{combustible.status}</td>
                                                     <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
+                                                        <ActualizarCombustible combustible={combustible} />
+                                                        
                                                         <BorrarCombustible combustibleId={combustible.id} />
                                                     </td>
                                                 </tr>

@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -13,7 +12,7 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input"
 import { toast } from "@/hooks/use-toast";
-import { modeloSchema, ModeloSchemaForm } from "@/lib/form/modelos";
+import { marcaSchema, MarcaSchemaForm } from "@/lib/form/marca";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Brand } from "@prisma/client";
 import { Loader } from "lucide-react";
@@ -21,28 +20,28 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form"
 
-export function AddModelo({
-    marcas
-}: { marcas: Brand[] }) {
+export function ActualizarMarca({
+    marca
+}: { marca: Brand }) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
 
-    const form = useForm<ModeloSchemaForm>({
-        resolver: zodResolver(modeloSchema),
+    const form  = useForm<MarcaSchemaForm>({
+        resolver: zodResolver(marcaSchema),
         defaultValues: {
-            description: "",
-            brandId: 0,
-            status: "",
+         id: marca.id,
+          description: marca.description,
+          status: marca.status,
         },
     });
     
-    const onSubmit = async (data: ModeloSchemaForm) => {
+    const onSubmit = async (data: MarcaSchemaForm) => {
         try {
             setIsLoading(true);
 
-            const response = await fetch("/api/modelos/crear", {
-                method: "POST",
+            const response = await fetch("/api/marca/actualizar", {
+                method: "PUT",
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -56,21 +55,19 @@ export function AddModelo({
             }
 
             setIsOpen(false);
-            console.log("Modelo agregada con éxito");
+            console.log("Marca actualizada con éxito");
             toast({
-                title: "Modelo Agregada",
-                description: "La Modelo ha sido agregada correctamente",
+                title: "Actualizar Marca",
+                description: "La marca ha sido actualizada correctamente",
             });
 
             router.refresh();
         } catch (error) {
             toast({
                 variant: 'destructive',
-                title: "Error al agregar Modelo",
+                title: "Error al actualizar Marca",
                 description: (error as Error).message
-            });
-
-            console.log(error);
+            })
         } finally {
             setIsLoading(false);
         }
@@ -79,13 +76,13 @@ export function AddModelo({
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline">Añadir Modelo</Button>
+                <Button variant="outline">Actualizar</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Añadir Modelo</DialogTitle>
+                    <DialogTitle>Actualizar Marca</DialogTitle>
                     <DialogDescription>
-                        Llenar para agregar un nuevo modelo
+                        Llenar para actualizar una nueva marca
                     </DialogDescription>
                 </DialogHeader>
 
@@ -100,41 +97,7 @@ export function AddModelo({
                                         Descripción
                                     </FormLabel>
                                     <FormControl>
-                                        <Input {...field} placeholder="Descripción de la Modelo" />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="brandId"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>
-                                        Marca
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Select {...field}
-                                            value={field.value === undefined ? "" : field.value.toString()}
-                                            onValueChange={(value) => field.onChange(parseInt(value, 10))}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Selecciona una marca" />
-                                            </SelectTrigger>
-
-                                            <SelectContent>
-                                                {marcas.map((marca) => (
-                                                    <SelectItem
-                                                        key={marca.id}
-                                                        value={marca.id.toString()}
-                                                    >
-                                                        {marca.description}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                        <Input {...field} placeholder="Descripción de la marca" />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -150,7 +113,7 @@ export function AddModelo({
                                         Estado
                                     </FormLabel>
                                     <FormControl>
-                                        <Input {...field} placeholder="Estado de la Modelo" />
+                                        <Input {...field} placeholder="Estado de la marca" />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -158,7 +121,7 @@ export function AddModelo({
                         />
 
                         <Button type="submit">
-                            {isLoading ? <Loader className='mr-2 h-4 w-4 animate-spin' /> : 'Añadir Modelo'}
+                            {isLoading ? <Loader className='mr-2 h-4 w-4 animate-spin' /> : 'Actualizar marca'}
                         </Button>
                     </form>
                 </Form>
@@ -166,3 +129,4 @@ export function AddModelo({
         </Dialog>
     );
 }
+

@@ -15,15 +15,15 @@ import { Input } from "@/components/ui/input"
 import { toast } from "@/hooks/use-toast";
 import { modeloSchema, ModeloSchemaForm } from "@/lib/form/modelos";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Brand } from "@prisma/client";
+import { Brand, Model } from "@prisma/client";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form"
 
-export function AddModelo({
-    marcas
-}: { marcas: Brand[] }) {
+export function ActualizarModelo({
+    modelo, marcas
+}: { modelo: Model, marcas: Brand[] }) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
@@ -31,9 +31,10 @@ export function AddModelo({
     const form = useForm<ModeloSchemaForm>({
         resolver: zodResolver(modeloSchema),
         defaultValues: {
-            description: "",
-            brandId: 0,
-            status: "",
+            id: modelo.id,
+            description: modelo.description,
+            brandId: modelo.brandId,
+            status: modelo.status,
         },
     });
     
@@ -41,8 +42,8 @@ export function AddModelo({
         try {
             setIsLoading(true);
 
-            const response = await fetch("/api/modelos/crear", {
-                method: "POST",
+            const response = await fetch("/api/modelos/actualizar", {
+                method: "PUT",
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -56,21 +57,19 @@ export function AddModelo({
             }
 
             setIsOpen(false);
-            console.log("Modelo agregada con éxito");
+            console.log("Modelo actualizado con éxito");
             toast({
-                title: "Modelo Agregada",
-                description: "La Modelo ha sido agregada correctamente",
+                title: "Actualizar Modelo",
+                description: "El Modelo ha sido actualizado correctamente",
             });
 
             router.refresh();
         } catch (error) {
             toast({
                 variant: 'destructive',
-                title: "Error al agregar Modelo",
+                title: "Error al actualizar Modelo",
                 description: (error as Error).message
-            });
-
-            console.log(error);
+            })
         } finally {
             setIsLoading(false);
         }
@@ -79,13 +78,13 @@ export function AddModelo({
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline">Añadir Modelo</Button>
+                <Button variant="outline">Actualizar</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Añadir Modelo</DialogTitle>
+                    <DialogTitle>Actualizar Modelo</DialogTitle>
                     <DialogDescription>
-                        Llenar para agregar un nuevo modelo
+                        Llenar para actualizar un nuevo Modelo
                     </DialogDescription>
                 </DialogHeader>
 
@@ -158,7 +157,7 @@ export function AddModelo({
                         />
 
                         <Button type="submit">
-                            {isLoading ? <Loader className='mr-2 h-4 w-4 animate-spin' /> : 'Añadir Modelo'}
+                            {isLoading ? <Loader className='mr-2 h-4 w-4 animate-spin' /> : 'Actualizar Modelo'}
                         </Button>
                     </form>
                 </Form>
@@ -166,3 +165,4 @@ export function AddModelo({
         </Dialog>
     );
 }
+

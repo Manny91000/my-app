@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const reporteSchema = z.object({
+    id: z.number().optional(),
     startDate: z.string().min(1, "La fecha inicial es requerida"),
     endDate: z.string().min(1, "La fecha final es requerida"),
     employeeId: z.number().optional(),
