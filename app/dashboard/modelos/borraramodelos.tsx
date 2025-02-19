@@ -40,10 +40,10 @@ export default function BorrarModelo({ modeloId }: { modeloId: number }) {
       }
 
       setIsOpen(false);
-      console.log("Modelo agregado con éxito");
+      console.log("Modelo eliminado con éxito");
       toast({
-        title: "Modelo Agregado",
-        description: "El Modelo ha sido agregada correctamente",
+        title: "Eliminar modelo",
+        description: "El Modelo ha sido eliminado correctamente",
       });
 
       router.refresh();
@@ -64,7 +64,7 @@ export default function BorrarModelo({ modeloId }: { modeloId: number }) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant='outline'>
-          Eliminar Modelo
+          Eliminar
         </Button>
       </DialogTrigger>
       <DialogContent>

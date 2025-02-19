@@ -65,7 +65,7 @@ export default function BorrarAlquiler({ alquilerId }: { alquilerId: number }) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant='outline'>
-          Eliminar Alquiler
+          Eliminar
         </Button>
       </DialogTrigger>
       <DialogContent>

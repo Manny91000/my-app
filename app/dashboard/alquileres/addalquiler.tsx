@@ -20,14 +20,17 @@ import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form"
-import { Customer, Vehicle } from "@prisma/client";
+import { Customer, Employee, Vehicle } from "@prisma/client";
+import { Textarea } from "@/components/ui/textarea";
 
 export function AddAlquiler({
     vehiculos,
     clientes,
+    empleados
 }: {
     vehiculos: Vehicle[],
-    clientes: Customer[],
+        clientes: Customer[],
+    empleados: Employee[],
 }) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -41,6 +44,8 @@ export function AddAlquiler({
             days: undefined, comments: "", status: "",
         },
     });
+
+    console.log(form.formState.errors);
     
     const onSubmit = async (data: AlquilerSchemaForm) => {
         try {
@@ -84,7 +89,7 @@ export function AddAlquiler({
             <DialogTrigger asChild>
                 <Button variant="outline">Añadir Alquiler</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[425px] md:max-w-[825px]">
                 <DialogHeader>
                     <DialogTitle>Añadir Alquiler</DialogTitle>
                     <DialogDescription>
@@ -94,7 +99,8 @@ export function AddAlquiler({
 
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-                        <FormField
+                        <div className="grid md:grid-cols-2 gap-5">
+                            <FormField
                                 control={form.control}
                                 name="vehicleId"
                                 render={({ field }) => (
@@ -116,6 +122,38 @@ export function AddAlquiler({
                                                             key={vehiculo.id}
                                                             value={vehiculo.id.toString()}>
                                                             {vehiculo.description}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="employeeId"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Empleado</FormLabel>
+                                        <FormControl>
+                                            <Select
+                                                {...field}
+                                                value={field.value ? field.value.toString() : ""}
+                                                onValueChange={(value) => field.onChange(parseInt(value, 10))}
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Selecciona un empleado" />
+                                                </SelectTrigger>
+
+                                                <SelectContent>
+                                                    {empleados.map((empleado) => (
+                                                        <SelectItem
+                                                            key={empleado.id}
+                                                            value={empleado.id.toString()}>
+                                                            {empleado.name}
                                                         </SelectItem>
                                                     ))}
                                                 </SelectContent>
@@ -263,12 +301,13 @@ export function AddAlquiler({
                                     <FormItem>
                                         <FormLabel>Comentarios</FormLabel>
                                         <FormControl>
-                                            <textarea rows={5} placeholder="Comentarios" {...field} />
+                                            <Textarea rows={5} placeholder="Comentarios" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
+                        </div>
 
                         <Button type="submit">
                             {isLoading ? <Loader className='mr-2 h-4 w-4 animate-spin' /> : 'Añadir Alquiler'}

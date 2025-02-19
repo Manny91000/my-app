@@ -6,15 +6,15 @@ import { AddEmpleado } from './addempleados';
 
 export default async function page() {
 // datos de las marcas
-const empleados = await prisma.employee.findMany();
-const roles = await prisma.role.findMany();
+    const empleados = await prisma.employee.findMany();
+    const roles = await prisma.role.findMany();
 
     return (
         <div className='w-full space-y-4'>
             <div className='flex items-center justify-between'>
                 <h1 className='text-xl font-bold'>Lista de empleados</h1>
 
-                <AddEmpleado />
+                <AddEmpleado roles={roles} />
             </div>
     
             <div className="flex flex-col">
@@ -46,7 +46,7 @@ const roles = await prisma.role.findMany();
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{empleado.documentId}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{empleado.workShift}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{empleado.commissionPct}</td>
-                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{empleado.hireDate.toLocaleString()}</td>
+                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{empleado.hireDate.toLocaleDateString()}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{empleado.status}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{roles.find(rol => rol.id === empleado.roleId)?.name}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{empleado.email}</td>

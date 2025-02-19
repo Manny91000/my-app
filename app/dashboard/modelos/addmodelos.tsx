@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -68,6 +69,8 @@ export function AddModelo({
                 title: "Error al agregar Modelo",
                 description: (error as Error).message
             });
+
+            console.log(error);
         } finally {
             setIsLoading(false);
         }
@@ -113,14 +116,25 @@ export function AddModelo({
                                         Descripción
                                     </FormLabel>
                                     <FormControl>
-                                        <select {...field}>
-                                            <option value="">Seleccionar marca</option>
-                                            {marcas.map((marca) => (
-                                                <option key={marca.id} value={marca.id}>
-                                                    {marca.description}
-                                                </option>
-                                            ))}
-                                        </select>
+                                        <Select {...field}
+                                            value={field.value === undefined ? "" : field.value.toString()}
+                                            onValueChange={(value) => field.onChange(parseInt(value, 10))}
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Selecciona una marca" />
+                                            </SelectTrigger>
+
+                                            <SelectContent>
+                                                {marcas.map((marca) => (
+                                                    <SelectItem
+                                                        key={marca.id}
+                                                        value={marca.id.toString()}
+                                                    >
+                                                        {marca.description}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>

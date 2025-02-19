@@ -41,10 +41,10 @@ export default function BorrarVehiculo({ vehiculoId }: { vehiculoId: number }) {
       }
 
       setIsOpen(false);
-      console.log("Vehiculo agregado con éxito");
+      console.log("Vehiculo eliminado con éxito");
       toast({
-        title: "Vehiculo Agregado",
-        description: "El Vehiculo ha sido agregada correctamente",
+        title: "Eliminar vehiculo",
+        description: "El Vehiculo ha sido eliminado correctamente",
       });
 
       router.refresh();
@@ -65,7 +65,7 @@ export default function BorrarVehiculo({ vehiculoId }: { vehiculoId: number }) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant='outline'>
-          Elininar Vehiculo
+          Elininar
         </Button>
       </DialogTrigger>
       <DialogContent>

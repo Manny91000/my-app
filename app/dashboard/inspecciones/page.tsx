@@ -12,18 +12,18 @@ export default async function page() {
     const inspecciones = await prisma.inspection.findMany();
     
     return (
-        <div className='w-full space-y-4'>
+        <div className='w-full space-y-4 overflow-hidden'>
             <div className='flex items-center justify-between'>
                 <h1 className='text-xl font-bold'>Lista de inspecciones</h1>
         
                 <AddInspection vehiculos={vehiculos} clientes={clientes} empleados={empleados} />
             </div>
         
-            <div className="flex flex-col">
+            <div className="flex flex-col overflow-hidden">
                 <div className=" overflow-x-auto">
-                    <div className="min-w-full inline-block align-middle">
-                        <div className="overflow-hidden border rounded-lg border-gray-300">
-                            <table className=" min-w-full  rounded-xl">
+                    <div className="min-w-ful inline-block align-middle">
+                        <div className="border rounded-lg border-gray-300">
+                            <table className=" min-w-ful rounded-xl">
                                 <thead>
                                     <tr className="bg-gray-50">
                                         <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Id </th>

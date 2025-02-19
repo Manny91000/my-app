@@ -78,7 +78,7 @@ export function AddCliente() {
             <DialogTrigger asChild>
                 <Button variant="outline">Añadir Cliente</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[625px] lg:max-w-[825px]">
                 <DialogHeader>
                     <DialogTitle>Añadir Cliente</DialogTitle>
                     <DialogDescription>
@@ -88,6 +88,7 @@ export function AddCliente() {
 
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                        <div className="grid md:grid-cols-2 gap-5">
                         <FormField
                                 control={form.control}
                                 name="name"
@@ -200,6 +201,7 @@ export function AddCliente() {
                                     </FormItem>
                                 )}
                             />
+                        </div>
 
                         <Button type="submit">
                             {isLoading ? <Loader className='mr-2 h-4 w-4 animate-spin' /> : 'Añadir Cliente'}

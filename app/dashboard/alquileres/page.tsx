@@ -15,10 +15,9 @@ export default async function page() {
         <div className='w-full space-y-4'>
             <div className='flex items-center justify-between'>
                 <h1 className='text-xl font-bold'>Lista de los alquileres</h1>
-                <AddAlquiler vehiculos={vehiculos} clientes={clientes} />
+                <AddAlquiler vehiculos={vehiculos} clientes={clientes} empleados={empleados} />
             </div>
         
-
             <div className="flex flex-col">
                 <div className=" overflow-x-auto">
                     <div className="min-w-full inline-block align-middle">

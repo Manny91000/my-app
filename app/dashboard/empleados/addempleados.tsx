@@ -20,8 +20,13 @@ import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form"
+import { Role } from "@prisma/client";
 
-export function AddEmpleado() {
+export function AddEmpleado({
+    roles,
+}: {
+    roles: Role[],
+}) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
@@ -31,7 +36,7 @@ export function AddEmpleado() {
         defaultValues: {
           name: "", email: "", password: "", workShift: "Diurna",
             status: "Activo", documentId: "", hireDate: new Date(),
-            role: "Asistente", commissionPct: 0
+            roleId: 0, commissionPct: 0
         },
     });
     
@@ -77,7 +82,7 @@ export function AddEmpleado() {
             <DialogTrigger asChild>
                 <Button variant="outline">Añadir Empleado</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[625px] lg:max-w-[825px]">
                 <DialogHeader>
                     <DialogTitle>Añadir Empleado</DialogTitle>
                     <DialogDescription>
@@ -87,6 +92,7 @@ export function AddEmpleado() {
 
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                        <div className="grid md:grid-cols-2 gap-5">
                         <FormField
                             control={form.control}
                             name="name"
@@ -220,23 +226,29 @@ export function AddEmpleado() {
 
                         <FormField
                             control={form.control}
-                            name="role"
+                            name="roleId"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Rol</FormLabel>
                                     <FormControl>
                                         <Select
                                             {...field}
-                                            value={field.value}
-                                            onValueChange={(value) => field.onChange(value)}
+                                            value={field.value.toString()}
+                                            onValueChange={(value) => field.onChange(parseInt(value, 10))}
                                         >
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Selecciona un rol" />
                                             </SelectTrigger>
 
                                             <SelectContent>
-                                                <SelectItem value="Asistente">Asistente</SelectItem>
-                                                <SelectItem value="Administrador">Administrador</SelectItem>
+                                                {roles.map((role) => (
+                                                    <SelectItem
+                                                        key={role.id}
+                                                        value={role.id.toString()}
+                                                    >
+                                                        {role.name}
+                                                    </SelectItem>
+                                                ))}
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
@@ -261,7 +273,8 @@ export function AddEmpleado() {
                                     <FormMessage />
                                 </FormItem>
                             )}
-                        />
+                            />
+                        </div>
 
                         <Button type="submit">
                             {isLoading ? <Loader className='mr-2 h-4 w-4 animate-spin' /> : 'Añadir Empleado'}

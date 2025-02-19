@@ -65,7 +65,7 @@ export default function BorrarCliente({ clienteId }: { clienteId: number }) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant='outline'>
-          Eliminar Cliente
+          Eliminar
         </Button>
       </DialogTrigger>
       <DialogContent>

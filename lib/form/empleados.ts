@@ -39,9 +39,10 @@ export const empleadoSchema = z.object({
     status: z.string({
         required_error: "El estado es obligatorio.",
     }).nonempty("El estado es obligatorio.").default("Activo"),
-    role: z.string({
+    roleId: z.number({
         required_error: "El rol es obligatorio.",
-    }).nonempty("El rol es obligatorio.").default("ASSISTANT"),
+    }).int({ message: "El id del rol debe ser un número entero." })
+        .positive({ message: "El id del rol debe ser positivo." }).default(0),
 });
 
 export type EmpleadoSchemaForm = z.infer<typeof empleadoSchema>;

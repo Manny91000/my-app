@@ -43,9 +43,10 @@ export default function BorrarMarca({ marcaId }: { marcaId: number }) {
       setIsOpen(false);
       console.log("Marca agregado con éxito");
       toast({
-        title: "Marca Agregado",
-        description: "El Marca ha sido agregada correctamente",
-      })
+        title: "Eliminar marca",
+        description: "La marca ha sido eliminada correctamente",
+      });
+
       router.refresh();
     } catch (error) {
       console.log(error);
@@ -65,7 +66,7 @@ export default function BorrarMarca({ marcaId }: { marcaId: number }) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant='outline'>
-          Eliminar marca
+          Eliminar
         </Button>
       </DialogTrigger>
       <DialogContent>

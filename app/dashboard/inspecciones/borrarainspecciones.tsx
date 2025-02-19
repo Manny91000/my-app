@@ -42,8 +42,8 @@ export default function BorrarInspection({ inspectionId }: { inspectionId: numbe
       setIsOpen(false);
       console.log("Inspeccion agregado con éxito");
       toast({
-        title: "Inspeccion Agregado",
-        description: "El Inspeccion ha sido agregada correctamente",
+        title: "Eliminar inspeccion",
+        description: "La Inspeccion ha sido eliminada correctamente",
       });
 
       router.refresh();
@@ -64,7 +64,7 @@ export default function BorrarInspection({ inspectionId }: { inspectionId: numbe
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant='outline'>
-          Eliminar Inspeccion
+          Eliminar
         </Button>
       </DialogTrigger>
       <DialogContent>

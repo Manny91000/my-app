@@ -38,11 +38,12 @@ export default function BorraraTipoDeVehiculo({ tipodevehiculoId }: { tipodevehi
       }
 
       setIsOpen(false);
-      console.log("Tipo de vehiculo agregado con éxito");
+      console.log("Tipo de vehiculo eliminado con éxito");
       toast({
-        title: "Tipo De Vehiculo Agregado",
-        description: "El tipo de vehiculo ha sido agregada correctamente",
-      })
+        title: "Eliminar tipo de vehiculo",
+        description: "El tipo de vehiculo ha sido eliminado correctamente",
+      });
+
       router.refresh();
     } catch (error) {
       console.log(error);
@@ -62,7 +63,7 @@ export default function BorraraTipoDeVehiculo({ tipodevehiculoId }: { tipodevehi
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant='outline'>
-          Eliminar inspecciones
+          Eliminar
         </Button>
       </DialogTrigger>
       <DialogContent>

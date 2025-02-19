@@ -42,8 +42,8 @@ export default function BorrarEmpleado({ empleadoId }: { empleadoId: number }) {
       setIsOpen(false);
       console.log("Empleado agregado con éxito");
       toast({
-        title: "Empleado Agregado",
-        description: "El Empleado ha sido agregada correctamente",
+        title: "Eliminar empleado",
+        description: "El Empleado ha sido eliminado correctamente",
       });
 
       router.refresh();
@@ -64,7 +64,7 @@ export default function BorrarEmpleado({ empleadoId }: { empleadoId: number }) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant='outline'>
-          Eliminar Empleado
+          Eliminar
         </Button>
       </DialogTrigger>
       <DialogContent>

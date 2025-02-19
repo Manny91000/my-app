@@ -89,7 +89,6 @@ model Role {
   employees    Employee[]
 }
 
-
 model Employee {
   id            Int      @id @default(autoincrement())
   name          String

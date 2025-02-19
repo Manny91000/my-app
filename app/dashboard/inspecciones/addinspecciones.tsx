@@ -23,6 +23,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form"
 import { Customer, Employee, Vehicle } from "@prisma/client";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 
 export function AddInspection({
     vehiculos,
@@ -90,7 +91,7 @@ export function AddInspection({
             <DialogTrigger asChild>
                 <Button variant="outline">Añadir Inspeccion</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[425px] lg:max-w-[825px]">
                 <DialogHeader>
                     <DialogTitle>Añadir Inspeccion</DialogTitle>
                     <DialogDescription>
@@ -100,310 +101,312 @@ export function AddInspection({
 
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-                        <FormField
-                            control={form.control}
-                            name="vehicleId"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Vehículo</FormLabel>
-                                    <FormControl>
-                                        <Select
-                                            {...field}
-                                            value={field.value === undefined ? "" : field.value.toString()}
-                                            onValueChange={(value) => field.onChange(parseInt(value, 10))}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Selecciona un vehículo" />
-                                            </SelectTrigger>
+                        <div className="grid md:grid-cols-2 gap-5">
+                            <FormField
+                                control={form.control}
+                                name="vehicleId"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Vehículo</FormLabel>
+                                        <FormControl>
+                                            <Select
+                                                {...field}
+                                                value={field.value === undefined ? "" : field.value.toString()}
+                                                onValueChange={(value) => field.onChange(parseInt(value, 10))}
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Selecciona un vehículo" />
+                                                </SelectTrigger>
 
-                                            <SelectContent>
-                                                {vehiculos.map((vehiculo) => (
-                                                    <SelectItem
-                                                        key={vehiculo.id}
-                                                        value={vehiculo.id.toString()}
-                                                    >
-                                                        {vehiculo.description}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                                <SelectContent>
+                                                    {vehiculos.map((vehiculo) => (
+                                                        <SelectItem
+                                                            key={vehiculo.id}
+                                                            value={vehiculo.id.toString()}
+                                                        >
+                                                            {vehiculo.description}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="customerId"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Cliente</FormLabel>
-                                    <FormControl>
-                                        <Select
-                                            {...field}
-                                            value={field.value === undefined ? "" : field.value.toString()}
-                                            onValueChange={(value) => field.onChange(parseInt(value, 10))}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Selecciona un cliente" />
-                                            </SelectTrigger>
+                            <FormField
+                                control={form.control}
+                                name="customerId"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Cliente</FormLabel>
+                                        <FormControl>
+                                            <Select
+                                                {...field}
+                                                value={field.value === undefined ? "" : field.value.toString()}
+                                                onValueChange={(value) => field.onChange(parseInt(value, 10))}
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Selecciona un cliente" />
+                                                </SelectTrigger>
 
-                                            <SelectContent>
-                                                {clientes.map((cliente) => (
-                                                    <SelectItem
-                                                        key={cliente.id}
-                                                        value={cliente.id.toString()}
-                                                    >
-                                                        {cliente.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                                <SelectContent>
+                                                    {clientes.map((cliente) => (
+                                                        <SelectItem
+                                                            key={cliente.id}
+                                                            value={cliente.id.toString()}
+                                                        >
+                                                            {cliente.name}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="employeeId"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Empleado</FormLabel>
-                                    <FormControl>
-                                        <Select
-                                            {...field}
-                                            value={field.value.toString()}
-                                            onValueChange={(value) => field.onChange(parseInt(value, 10))}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Selecciona un empleado" />
-                                            </SelectTrigger>
+                            <FormField
+                                control={form.control}
+                                name="employeeId"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Empleado</FormLabel>
+                                        <FormControl>
+                                            <Select
+                                                {...field}
+                                                value={field.value ? field.value.toString() : ""}
+                                                onValueChange={(value) => field.onChange(parseInt(value, 10))}
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Selecciona un empleado" />
+                                                </SelectTrigger>
 
-                                            <SelectContent>
-                                                {empleados.map((empleado) => (
-                                                    <SelectItem
-                                                        key={empleado.id}
-                                                        value={empleado.id.toString()}
-                                                    >
-                                                        {empleado.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                                <SelectContent>
+                                                    {empleados.map((empleado) => (
+                                                        <SelectItem
+                                                            key={empleado.id}
+                                                            value={empleado.id.toString()}
+                                                        >
+                                                            {empleado.name}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="fuelAmount"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Cantidad de Combustible</FormLabel>
-                                    <FormControl>
-                                        <Select {...field}
-                                            value={field.value}
-                                            onValueChange={(value) => field.onChange(value)}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Selecciona cantidad de combustible" />
-                                            </SelectTrigger>
+                            <FormField
+                                control={form.control}
+                                name="fuelAmount"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Cantidad de Combustible</FormLabel>
+                                        <FormControl>
+                                            <Select {...field}
+                                                value={field.value}
+                                                onValueChange={(value) => field.onChange(value)}
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Selecciona cantidad de combustible" />
+                                                </SelectTrigger>
 
-                                            <SelectContent>
-                                                <SelectItem value="1/4">1/4</SelectItem>
-                                                <SelectItem value="1/2">1/2</SelectItem>
-                                                <SelectItem value="3/4">3/4</SelectItem>
-                                                <SelectItem value="full">Full</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                                <SelectContent>
+                                                    <SelectItem value="1/4">1/4</SelectItem>
+                                                    <SelectItem value="1/2">1/2</SelectItem>
+                                                    <SelectItem value="3/4">3/4</SelectItem>
+                                                    <SelectItem value="full">Full</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="tireStatus"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Info de Llantas</FormLabel>
-                                    <FormControl>
-                                        <textarea rows={5} placeholder="ex: Llantas rotas" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                            <FormField
+                                control={form.control}
+                                name="tireStatus"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Info de Llantas</FormLabel>
+                                        <FormControl>
+                                            <Textarea placeholder="ex: Llantas rotas" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="inspectionDate"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Fecha de Inspection</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            type="date"
-                                            placeholder="dd/mm/aaaa"
-                                            value={field.value ? new Date(field.value).toISOString().split("T")[0] : ""}
-                                            onChange={(event) => field.onChange(new Date(event.target.value))}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="status"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Estado</FormLabel>
-                                    <FormControl>
-                                        <Select {...field}>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Selecciona un estado" />
-                                            </SelectTrigger>
-
-                                            <SelectContent>
-                                                <SelectItem value="Pendiente">Pendiente</SelectItem>
-                                                <SelectItem value="Completado">Completado</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-
-                        <FormField
-                            control={form.control}
-                            name="scratches"
-                            render={({ field }) => (
-                                <FormItem>
-                                    {/* <FormLabel>Escápulas</FormLabel> */}
-                                    <FormControl className="">
-                                        <div className="items-top flex gap-x-2">
-                                            <Checkbox id="scratches"
-                                                // {...field}
-                                                checked={field.value}
-                                                onCheckedChange={(value) => field.onChange(value || false)}
+                            <FormField
+                                control={form.control}
+                                name="inspectionDate"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Fecha de Inspection</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                type="date"
+                                                placeholder="dd/mm/aaaa"
+                                                value={field.value ? new Date(field.value).toISOString().split("T")[0] : ""}
+                                                onChange={(event) => field.onChange(new Date(event.target.value))}
                                             />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                                            <Label htmlFor="scratches" className="">
-                                                <p
-                                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                >Escápulas
-                                                </p>
+                            <FormField
+                                control={form.control}
+                                name="status"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Estado</FormLabel>
+                                        <FormControl>
+                                            <Select {...field}>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Selecciona un estado" />
+                                                </SelectTrigger>
 
-                                                <span className="text-sm text-muted-foreground">
-                                                    Indica si hay escápulas en el vehículo.
-                                                </span>
-                                            </Label>
-                                        </div>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                                <SelectContent>
+                                                    <SelectItem value="Pendiente">Pendiente</SelectItem>
+                                                    <SelectItem value="Completado">Completado</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="hasSpareTire"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormControl>
-                                        <div className="items-top flex gap-x-2">
-                                            <Checkbox id="hasSpareTire"
-                                                // {...field}
-                                                checked={field.value}
-                                                onCheckedChange={(value) => field.onChange(value || false)}
-                                            />
+                            <FormField
+                                control={form.control}
+                                name="scratches"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        {/* <FormLabel>Escápulas</FormLabel> */}
+                                        <FormControl className="">
+                                            <div className="items-top flex gap-x-2">
+                                                <Checkbox id="scratches"
+                                                    // {...field}
+                                                    checked={field.value}
+                                                    onCheckedChange={(value) => field.onChange(value || false)}
+                                                />
 
-                                            <Label htmlFor="hasSpareTire" className="">
-                                                <p
-                                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                >Llanta Extra
-                                                </p>
+                                                <Label htmlFor="scratches" className="">
+                                                    <p
+                                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                    >Escápulas
+                                                    </p>
 
-                                                <span className="text-sm text-muted-foreground">
-                                                    Indica si hay llanta extra en el vehículo.
-                                                </span>
-                                            </Label>
-                                        </div>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                                    <span className="text-sm text-muted-foreground">
+                                                        Indica si hay escápulas en el vehículo.
+                                                    </span>
+                                                </Label>
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="hasJack"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormControl>
-                                        <div className="items-top flex gap-x-2">
-                                            <Checkbox id="hasJack"
-                                                // {...field}
-                                                checked={field.value}
-                                                onCheckedChange={(value) => field.onChange(value || false)}
-                                            />
+                            <FormField
+                                control={form.control}
+                                name="hasSpareTire"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <div className="items-top flex gap-x-2">
+                                                <Checkbox id="hasSpareTire"
+                                                    // {...field}
+                                                    checked={field.value}
+                                                    onCheckedChange={(value) => field.onChange(value || false)}
+                                                />
 
-                                            <Label htmlFor="hasJack" className="">
-                                                <p
-                                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                >Jack
-                                                </p>
+                                                <Label htmlFor="hasSpareTire" className="">
+                                                    <p
+                                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                    >Llanta Extra
+                                                    </p>
 
-                                                <span className="text-sm text-muted-foreground">
-                                                    Indica si hay Jack en el vehículo.
-                                                </span>
-                                            </Label>
-                                        </div>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                                    <span className="text-sm text-muted-foreground">
+                                                        Indica si hay llanta extra en el vehículo.
+                                                    </span>
+                                                </Label>
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                        <FormField
-                            control={form.control}
-                            name="hasGlassDamage"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormControl>
-                                        <div className="items-top flex gap-x-2">
-                                            <Checkbox id="hasGlassDamage"
-                                                // {...field}
-                                                checked={field.value}
-                                                onCheckedChange={(value) => field.onChange(value || false)}
-                                            />
+                            <FormField
+                                control={form.control}
+                                name="hasJack"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <div className="items-top flex gap-x-2">
+                                                <Checkbox id="hasJack"
+                                                    // {...field}
+                                                    checked={field.value}
+                                                    onCheckedChange={(value) => field.onChange(value || false)}
+                                                />
 
-                                            <Label htmlFor="hasGlassDamage" className="">
-                                                <p
-                                                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                                                >Daño de Visión
-                                                </p>
+                                                <Label htmlFor="hasJack" className="">
+                                                    <p
+                                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                    >Jack
+                                                    </p>
 
-                                                <span className="text-sm text-muted-foreground">
-                                                    Indica si hay daño de visión en el vehículo.
-                                                </span>
-                                            </Label>
-                                        </div>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                                    <span className="text-sm text-muted-foreground">
+                                                        Indica si hay Jack en el vehículo.
+                                                    </span>
+                                                </Label>
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="hasGlassDamage"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <div className="items-top flex gap-x-2">
+                                                <Checkbox id="hasGlassDamage"
+                                                    // {...field}
+                                                    checked={field.value}
+                                                    onCheckedChange={(value) => field.onChange(value || false)}
+                                                />
+
+                                                <Label htmlFor="hasGlassDamage" className="">
+                                                    <p
+                                                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                    >Daño de Visión
+                                                    </p>
+
+                                                    <span className="text-sm text-muted-foreground">
+                                                        Indica si hay daño de visión en el vehículo.
+                                                    </span>
+                                                </Label>
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        </div>
 
                         <Button type="submit">
                             {isLoading ? <Loader className='mr-2 h-4 w-4 animate-spin' /> : 'Añadir Inspeccion'}

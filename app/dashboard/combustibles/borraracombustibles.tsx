@@ -65,7 +65,7 @@ export default function BorrarCumbustible({ combustibleId }: { combustibleId: nu
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant='outline'>
-          Eliminar Combustible
+          Eliminar
         </Button>
       </DialogTrigger>
       <DialogContent>
