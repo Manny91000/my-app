@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -13,39 +13,81 @@ import {
   } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button'
 import { DialogClose } from '@radix-ui/react-dialog'
-  
-export default function BorraraVehiculos({ vehiculoId }: { vehiculoId: number }) {
-    const BorraraVehiculos = () => {
-        console.log(vehiculoId);
-        
+import { toast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
+import { Loader } from 'lucide-react'
+
+export default function BorrarVehiculo({ vehiculoId }: { vehiculoId: number }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter ();
+       
+  const onSubmit = async () => {
+    try {
+      setIsLoading(true);
+
+      const response = await fetch(`/api/vehiculo/eliminar?id=${vehiculoId}`, {
+        method: "DELETE",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const { message } = await response.json();
+
+      if (!response.ok) {
+        throw new Error(message);
+      }
+
+      setIsOpen(false);
+      console.log("Vehiculo agregado con éxito");
+      toast({
+        title: "Vehiculo Agregado",
+        description: "El Vehiculo ha sido agregada correctamente",
+      });
+
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+      toast({
+        variant: 'destructive',
+        title: "Error al agregar Vehiculo",
+        description: (error as Error).message
+      })
+
+    } finally {
+      setIsLoading(false);
     }
+  };
+  
   return (
-      <Dialog>
-  <DialogTrigger asChild>
-    <Button variant='outline'>
-        Elmininar vehiculos
-    </Button>
-  </DialogTrigger>
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>Borrar los vehiculos </DialogTitle>
-      <DialogDescription>
-        ¿Estás seguro de querer eliminar los vehiculos ?
-      </DialogDescription>
-    </DialogHeader>
-
-    <DialogFooter>
-
-        <DialogClose className='py-2 px-4 border rounded'>
-            Cancelar
-        </DialogClose>
-
-        <Button onClick={BorraraVehiculos}
-        >
-            Eliminar
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant='outline'>
+          Elininar Vehiculo
         </Button>
-    </DialogFooter>
-  </DialogContent>
-</Dialog>
-  )
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Borrar Vehiculo </DialogTitle>
+          <DialogDescription>
+            ¿Estás seguro de querer eliminar esta Vehiculo ?
+          </DialogDescription>
+        </DialogHeader>
+
+        <DialogFooter>
+
+          <DialogClose className='py-2 px-4 border rounded'>
+            Cancelar
+          </DialogClose>
+
+          <Button onClick={onSubmit} disabled={isLoading}
+          >
+            {isLoading ? <Loader className='mr-2 h-4 w-4 animate-spin' /> : 'Eliminar'}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
 }

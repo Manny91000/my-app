@@ -14,12 +14,15 @@ import { Input } from "@/components/ui/input"
 import { toast } from "@/hooks/use-toast";
 import { marcaSchema, MarcaSchemaForm } from "@/lib/form/marca";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form"
 
 export function AddMarca() {
     const [isOpen, setIsOpen] = useState<boolean>(false);
-
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
 
     const form  = useForm<MarcaSchemaForm>({
         resolver: zodResolver(marcaSchema),
@@ -31,6 +34,8 @@ export function AddMarca() {
     
     const onSubmit = async (data: MarcaSchemaForm) => {
         try {
+            setIsLoading(true);
+
             const response = await fetch("/api/marca/crear", {
                 method: "POST",
                 headers: {
@@ -39,7 +44,7 @@ export function AddMarca() {
                 body: JSON.stringify(data),
             });
 
-            const {message} = await response.json();
+            const { message } = await response.json();
 
             if (!response.ok) {
                 throw new Error(message);
@@ -50,69 +55,74 @@ export function AddMarca() {
             toast({
                 title: "Marca Agregada",
                 description: "La marca ha sido agregada correctamente",
-            })
-        } catch (error) {
-        toast({
+            });
 
-            variant: 'destructive',
+            router.refresh();
+        } catch (error) {
+            toast({
+                variant: 'destructive',
                 title: "Error al agregar Marca",
                 description: (error as Error).message
             })
-
+        } finally {
+            setIsLoading(false);
         }
-    }
+    };
 
-  return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline">Añadir Marca</Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Añadir Marca</DialogTitle>
-          <DialogDescription>
-           Llenar para agregar una nueva marca
-          </DialogDescription>
-        </DialogHeader>
+    return (
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger asChild>
+                <Button variant="outline">Añadir Marca</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                    <DialogTitle>Añadir Marca</DialogTitle>
+                    <DialogDescription>
+                        Llenar para agregar una nueva marca
+                    </DialogDescription>
+                </DialogHeader>
 
-         <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-        <FormField
-        control={form.control} 
-        name="description"
-        render={({field}) => (
-            <FormItem>
-                <FormLabel>
-                    Descripción
-                </FormLabel>
-                <FormControl>
-                    <Input {...field} placeholder="Descripción de la marca" />
-                </FormControl>
-                <FormMessage />
-            </FormItem>
-        )}
-        />
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                        <FormField
+                            control={form.control}
+                            name="description"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>
+                                        Descripción
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input {...field} placeholder="Descripción de la marca" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
-<FormField
-        control={form.control} 
-        name="status"
-        render={({field}) => (
-            <FormItem>
-                <FormLabel>
-                    Estado
-                </FormLabel>
-                <FormControl>
-                    <Input {...field} placeholder="Estado de la marca" />
-                </FormControl>
-                <FormMessage />
-            </FormItem>
-        )}
-        />
+                        <FormField
+                            control={form.control}
+                            name="status"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>
+                                        Estado
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input {...field} placeholder="Estado de la marca" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
-        <Button type="submit">Añadir marca</Button>
-         </form>
-         </Form>
-      </DialogContent>
-    </Dialog>
-  )
+                        <Button type="submit">
+                            {isLoading ? <Loader className='mr-2 h-4 w-4 animate-spin' /> : 'Añadir marca'}
+                        </Button>
+                    </form>
+                </Form>
+            </DialogContent>
+        </Dialog>
+    );
 }
+

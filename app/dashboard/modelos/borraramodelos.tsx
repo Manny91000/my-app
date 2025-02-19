@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -9,43 +9,84 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-
   } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button'
 import { DialogClose } from '@radix-ui/react-dialog'
-  
-export default function BorrarModelos({ modelosId }: { modelosId: number }) {
-    const BorraraModelos = () => {
-        console.log(modelosId);
-        
+import { toast } from '@/hooks/use-toast'
+import { useRouter } from 'next/navigation'
+import { Loader } from 'lucide-react'
+
+export default function BorrarModelo({ modeloId }: { modeloId: number }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter ();
+       
+  const onSubmit = async () => {
+    try {
+      setIsLoading(true);
+
+      const response = await fetch(`/api/modelos/eliminar?id=${modeloId}`, {
+        method: "DELETE",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const { message } = await response.json();
+
+      if (!response.ok) {
+        throw new Error(message);
+      }
+
+      setIsOpen(false);
+      console.log("Modelo agregado con éxito");
+      toast({
+        title: "Modelo Agregado",
+        description: "El Modelo ha sido agregada correctamente",
+      });
+
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+      toast({
+        variant: 'destructive',
+        title: "Error al agregar Modelo",
+        description: (error as Error).message
+      })
+
+    } finally {
+      setIsLoading(false);
     }
+  };
+  
   return (
-      <Dialog>
-  <DialogTrigger asChild>
-    <Button variant='outline'>
-        Elmininar modelos
-    </Button>
-  </DialogTrigger>
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>Borrar los modelos </DialogTitle>
-      <DialogDescription>
-        ¿Estás seguro de querer eliminar los modelos ?
-      </DialogDescription>
-    </DialogHeader>
-
-    <DialogFooter>
-
-        <DialogClose className='py-2 px-4 border rounded'>
-            Cancelar
-        </DialogClose>
-
-        <Button onClick={BorraraModelos}
-        >
-            Eliminar
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant='outline'>
+          Eliminar Modelo
         </Button>
-    </DialogFooter>
-  </DialogContent>
-</Dialog>
-  )
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Borrar Modelo </DialogTitle>
+          <DialogDescription>
+            ¿Estás seguro de querer eliminar esta Modelo ?
+          </DialogDescription>
+        </DialogHeader>
+
+        <DialogFooter>
+
+          <DialogClose className='py-2 px-4 border rounded'>
+            Cancelar
+          </DialogClose>
+
+          <Button onClick={onSubmit} disabled={isLoading}
+          >
+            {isLoading ? <Loader className='mr-2 h-4 w-4 animate-spin' /> : 'Eliminar'}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
 }

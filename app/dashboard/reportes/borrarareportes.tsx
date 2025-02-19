@@ -23,7 +23,7 @@ export default function BorraraReportes({ reportesId }: { reportesId: number }) 
       <Dialog>
   <DialogTrigger asChild>
     <Button variant='outline'>
-        Elmininar reportes
+        Eliminar reportes
     </Button>
   </DialogTrigger>
   <DialogContent>

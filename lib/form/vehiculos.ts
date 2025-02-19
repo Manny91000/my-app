@@ -1,15 +1,46 @@
 import { z } from "zod";
 
 export const vehiculoSchema = z.object({
-    description: z.string().min(1, "La descripción es requerida"),
-    chassisNumber: z.string().min(1, "El número de chasis es requerido"),
-    engineNumber: z.string().min(1, "El número de motor es requerido"),
-    plateNumber: z.string().min(1, "El número de placa es requerido"),
-    vehicleTypeId: z.number().min(1, "El tipo de vehículo es requerido"),
-    brandId: z.number().min(1, "La marca es requerida"),
-    modelId: z.number().min(1, "El modelo es requerido"),
-    fuelTypeId: z.number().min(1, "El tipo de combustible es requerido"),
-    status: z.enum(["active", "inactive", "rented", "maintenance"]).default("active"),
+    id: z.number().optional(),
+    description: z.string({
+        required_error: "El nombre es obligatorio.",
+    }).nonempty("El nombre es obligatorio."),
+    chassisNumber: z.string({
+        required_error: "El número de carrocería es obligatorio.",
+    }).nonempty("El número de carrocería es obligatorio."),
+    engineNumber: z.string({
+        required_error: "El número de motor es obligatorio.",
+    }).nonempty("El número de motor es obligatorio."),
+    plateNumber: z.string({
+        required_error: "El número de placa es obligatorio.",
+    }).nonempty("El número de placa es obligatorio."),
+    vehicleTypeId: z.number({
+        required_error: "El tipo de vehículo es obligatorio.",
+        invalid_type_error: "El tipo de vehículo es invalido.",
+    })
+        .int({ message: "El id del tipo de vehículo debe ser un número entero." })
+        .positive({ message: "El id del tipo de vehículo debe ser positivo." }),
+    brandId: z.number({
+        required_error: "El marca es obligatorio.",
+        invalid_type_error: "El marca es invalido.",
+    })
+        .int({ message: "El id del marca debe ser un número entero." })
+        .positive({ message: "El id del marca debe ser positivo." }),
+    modelId: z.number({
+        required_error: "El modelo es obligatorio.",
+        invalid_type_error: "El modelo es invalido.",
+    })
+        .int({ message: "El id del modelo debe ser un número entero." })
+        .positive({ message: "El id del modelo debe ser positivo." }),
+    fuelTypeId: z.number({
+        required_error: "El tipo de combustible es obligatorio.",
+        invalid_type_error: "El tipo de combustible es invalido.",
+    })
+        .int({ message: "El id del tipo de combustible debe ser un número entero." })
+        .positive({ message: "El id del tipo de combustible debe ser positivo." }),
+    status: z.string({
+        required_error: "El estado es obligatorio.",
+    }).nonempty("El estado es obligatorio.").default("Activo"),
 });
 
 export type VehiculoSchemaForm = z.infer<typeof vehiculoSchema>;

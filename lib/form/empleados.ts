@@ -1,15 +1,76 @@
 import { z } from "zod";
 
 export const empleadoSchema = z.object({
-    name: z.string().min(1, "El nombre es requerido"),
-    documentId: z.string().min(1, "El documento es requerido"),
-    workShift: z.string().min(1, "El horario es requerido"),
-    commissionPct: z.number().min(0, "La comisión debe ser mayor o igual a 0"),
-    hireDate: z.string().min(1, "La fecha de contrato es requerida"),
-    status: z.enum(["active", "inactive"]).default("active"),
-    roleId: z.number().min(1, "El rol es requerido"),
-    email: z.string().email("El correo electrónico no es válido"),
-    password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+    id: z.number().optional(),
+    name: z.string({
+        required_error: "El nombre es obligatorio.",
+    }).nonempty("El nombre es obligatorio."),
+    email: z.string({
+        required_error: "El email es obligatorio.",
+    })
+        .nonempty("El email es obligatorio.")
+        .email("El email es incorrecto."),
+    password: z.string({
+        required_error: "La contraseña es obligatoria.",
+    })
+        .nonempty("La contraseña es obligatoria.")
+        .min(8, { message: "La contraseña debe ser por lo menos de 8 caracteres." }),
+    documentId: z.string({
+        required_error: "El documento es obligatorio.",
+        invalid_type_error: "El documento debe ser cadena numérica.",
+    })
+        .nonempty("El documento es obligatorio.")
+        .length(11, { message: "El documento debe ser de 12 dígitos." })
+        .refine((value) => isValidDocumentId(value), {
+            message: "El documento proporcionado no es válido. Verifica que los dígitos sean correctos y cumplan con el formato.",
+        }),
+    workShift: z.string({
+        required_error: "El trabajo es obligatorio.",
+    }).nonempty("El trabajo es obligatorio."),
+    commissionPct: z.number({
+        required_error: "La comisión es obligatoria.",
+        // invalid_type_error: "La comisión es invalido.",
+    })
+        .positive({ message: "La comisión debe ser positivo." }),
+    hireDate: z.coerce.date({
+        required_error: "La fecha de contratación es obligatoria.",
+        invalid_type_error: "La fecha de contratación es invalido.",
+    }),
+    status: z.string({
+        required_error: "El estado es obligatorio.",
+    }).nonempty("El estado es obligatorio.").default("Activo"),
+    role: z.string({
+        required_error: "El rol es obligatorio.",
+    }).nonempty("El rol es obligatorio.").default("ASSISTANT"),
 });
 
 export type EmpleadoSchemaForm = z.infer<typeof empleadoSchema>;
+
+export const isValidDocumentId = (documentId: string): boolean => { 
+    const cleanDocumentId: string = documentId.replace(/-/g, "");
+    
+    if (cleanDocumentId.length !== 11 || !/^\d{11}$/.test(cleanDocumentId)) {
+        return false;
+    }
+
+    const multipliers: number[] = [1, 2, 1, 2, 1, 2, 1, 2, 1, 2];
+    const checkDigit: number = parseInt(cleanDocumentId.slice(-1));
+
+    let total: number = 0;
+
+    for (let i: number = 9; i >= 0; i--) {
+        const digit = parseInt(cleanDocumentId.charAt(i));
+        let product = digit * multipliers[i];
+
+        if (product > 9) {
+            product -= 9;
+        }
+
+        total += product;
+    }
+
+    const lastDigitOfTotal: number = parseInt(total.toString().slice(-1));
+    const expectedCheckDigit = lastDigitOfTotal > 0 ? 10 - lastDigitOfTotal : 0;
+
+    return expectedCheckDigit === checkDigit;
+}
