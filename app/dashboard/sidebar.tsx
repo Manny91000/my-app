@@ -63,7 +63,7 @@ const items = [
     url: "/dashboard/reportes",
     icon: Calendar,
   }
-]
+];
 
 export function AppSidebar() {
   return (
@@ -78,6 +78,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild>
                     <a href={item.url}>
                       <item.icon />
+
                       <span>{item.title}</span>
                     </a>
                   </SidebarMenuButton>
@@ -90,3 +91,4 @@ export function AppSidebar() {
     </Sidebar>
   )
 }
+

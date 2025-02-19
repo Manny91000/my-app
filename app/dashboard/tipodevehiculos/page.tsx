@@ -16,10 +16,9 @@ export default async function page() {
                 <h1 className='text-xl font-bold'>Listado de tipo de vehiculos</h1>
                 <AddTipoDeVehiculos />
             </div>
-        
 
             <div className="flex flex-col">
-                <div className=" overflow-x-auto">
+                <div className=" overflow-auto">
                     <div className="min-w-full inline-block align-middle">
                         <div className="overflow-hidden border rounded-lg border-gray-300">
                             <table className=" min-w-full  rounded-xl">

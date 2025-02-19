@@ -13,14 +13,14 @@ export default async function page() {
     const inspecciones = await prisma.inspection.findMany();
     
     return (
-        <div className='w-full space-y-4 overflow-hidden'>
+        <div className='w-full space-y-4'>
             <div className='flex items-center justify-between'>
                 <h1 className='text-xl font-bold'>Lista de inspecciones</h1>
         
                 <AddInspection vehiculos={vehiculos} clientes={clientes} empleados={empleados} />
             </div>
         
-            <div className="flex flex-col overflow-hidden">
+            <div className="flex flex-col overflow-auto">
                 <div className=" overflow-x-auto">
                     <div className="min-w-ful inline-block align-middle">
                         <div className="border rounded-lg border-gray-300">
@@ -38,7 +38,7 @@ export default async function page() {
                                         <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Robo</th>
                                         <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Daño de vidrio</th>
                                         <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Daño de goma</th>
-                                        <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Inspeccion</th>
+                                        <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize"> Comentario</th>
                                         <th scope="col" className="p-5 text-left text-sm leading-6 font-semibold text-gray-900 capitalize">Acciones</th>
                     
                                     </tr>
@@ -49,16 +49,16 @@ export default async function page() {
                     
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 ">{inspeccion.id}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{empleados.find(empleado => empleado.id === inspeccion.employeeId)?.name}</td>
-                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.inspectionDate.toLocaleString()}</td>
+                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.inspectionDate.toLocaleDateString()}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{vehiculos.find(vehiculo => vehiculo.id === inspeccion.vehicleId)?.description}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{clientes.find(cliente => cliente.id === inspeccion.customerId)?.name}</td>
-                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.scratches}</td>
+                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.scratches ? "Si" : "No"}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.fuelAmount}</td>
-                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.hasSpareTire}</td>
-                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.hasGlassDamage}</td>
-                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.hasJack}</td>
-                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.hasGlassDamage}</td>
-                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.hasSpareTire}</td>
+                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.hasSpareTire ? "Si" : "No"}</td>
+                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.hasGlassDamage ? "Si" : "No"}</td>
+                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.hasJack ? "Si" : "No"}</td>
+                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.hasGlassDamage ? "Si" : "No"}</td>
+                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{inspeccion.tireStatus}</td>
 
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 flex items-center gap-4">
                                                 <ActualizarInspeccion vehiculos={vehiculos} clientes={clientes} empleados={empleados} inspeccion={inspeccion} />

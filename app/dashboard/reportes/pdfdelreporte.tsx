@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Customer, Employee, Rent, Vehicle } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { useReactToPrint, UseReactToPrintFn } from "react-to-print";
+import { TimeSeleccionado, useFiltrarAlquileres } from "./useFiltrarAlquileres";
 
 const PdfDelReporte = ({
     alquileres,
@@ -17,34 +18,14 @@ const PdfDelReporte = ({
     clientes: Customer[],
     vehiculos: Vehicle[],
 }) => {
-    const [alquilerSelecionado, setAlquilerSelecionado] = useState<Rent[]>(alquileres);
-    const [timeSelecionado, setTimeSelecionado] = useState<string>("dia");
+    const [timeSelecionado, setTimeSelecionado] = useState<TimeSeleccionado>("dia");
+    const alquilerSelecionado = useFiltrarAlquileres(alquileres, timeSelecionado);
     const contentRef = useRef<HTMLDivElement>(null);
     
     const reactToPrintFn: UseReactToPrintFn = useReactToPrint({
         contentRef, documentTitle: `reportes ${timeSelecionado === "semana" ? "de la " : "del " + timeSelecionado}`,
         pageStyle: '12px 8px'
     });
-
-    useEffect(() => {
-        // const obtenerAlquileres = () => {
-        //     const alquileresEncontrado = alquileres.filter((alquiler) => {
-        //         if (timeSelecionado === "dia") {
-        //             return alquiler.rentDate.toLocaleDateString() === new Date().toLocaleDateString();
-        //         } else if (timeSelecionado === "semana") {
-        //             return alquiler.rentDate.toLocaleDateString() === new Date().toLocaleDateString();
-        //         } else if (timeSelecionado === "mes") {
-        //             return alquiler.rentDate.toLocaleDateString() === new Date().toLocaleDateString();
-        //         } else if (timeSelecionado === "año") {
-        //             return alquiler.rentDate.toLocaleDateString() === new Date().toLocaleDateString();
-        //         }
-        //     });
-
-        //     setAlquilerSelecionado(alquileresEncontrado);
-        // }
-
-        // obtenerAlquileres();
-    }, [timeSelecionado, alquileres]);
 
     return (
         <div className="grid gap-5">
@@ -59,7 +40,7 @@ const PdfDelReporte = ({
                     <h1 className="font-bold text-lg">Lista de reporte {timeSelecionado === "semana" ? "de la " : "del " + timeSelecionado}</h1>
 
                     <div className="w-[110px]">
-                        <Select value={timeSelecionado} onValueChange={(value) => setTimeSelecionado(value)}>
+                        <Select value={timeSelecionado} onValueChange={(value) => setTimeSelecionado(value as TimeSeleccionado)}>
                             <SelectTrigger>
                                 <SelectValue placeholder="Selecciona por fecha" />
                             </SelectTrigger>
@@ -67,14 +48,14 @@ const PdfDelReporte = ({
                             <SelectContent className="w-full">
                                 <SelectItem value="dia">Dia</SelectItem>
                                 <SelectItem value="semana">Semana</SelectItem>
-                                <SelectItem value="Mes">Mes</SelectItem>
+                                <SelectItem value="mes">Mes</SelectItem>
                                 <SelectItem value="año">Año</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
                 </div>
 
-                <div className=" overflow-x-auto">
+                <div className=" overflow-auto">
                     <div className="min-w-full inline-block align-middle">
                         {alquilerSelecionado.length === 0 ? (
                             <div className="flex items-center justify-center">
