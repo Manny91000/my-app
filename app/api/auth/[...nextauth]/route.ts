@@ -32,16 +32,20 @@ const handlers = NextAuth(
         ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      return true
+  void user; void account; void profile; void email; void credentials;
+  return true
     },
     async redirect({ url, baseUrl }) {
-      return baseUrl
+  void url;
+  return baseUrl
     },
     async session({ session, user, token }) {
-      return session
+  void user; void token;
+  return session
     },
     async jwt({ token, user, account, profile, isNewUser }) {
-      return token
+  void user; void account; void profile; void isNewUser;
+  return token
     }
 
 }
