@@ -141,3 +141,11 @@ model Rent {
 
   @@index([vehicleId])
 }
+
+model user {
+  id      String      @id @default(uuid())
+  name    String 
+  Email   String      @unique
+  createdAt DateTime @default(now())
+}
+ 
