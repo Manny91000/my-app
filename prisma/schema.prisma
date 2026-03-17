@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  engineType = "binary"
 }
 
 datasource db {
@@ -7,138 +8,118 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model VehicleType {
-  id          Int       @id @default(autoincrement())
-  description String    @db.VarChar(100)
-  status      String    @db.VarChar(20)
-  vehicles    Vehicle[]
-
-  @@index([description])
+model Alquiler {
+  Id              Int            @id(map: "PK__Alquiler__3214EC072D52439B") @default(autoincrement())
+  ClienteId       Int
+  VehiculoId      Int
+  EmpleadoId      Int
+  FechaInicio     DateTime       @db.Date
+  FechaFin        DateTime       @db.Date
+  FechaDevolucion DateTime?      @db.Date
+  PrecioPorDia    Decimal        @db.Decimal(10, 2)
+  TotalDias       Int
+  MontoTotal      Decimal        @db.Decimal(10, 2)
+  Estado          String         @default("Activo", map: "DF__Alquiler__Estado__0D7A0286") @db.VarChar(20)
+  Comentarios     String?        @db.VarChar(500)
+  FechaCreacion   DateTime       @default(now(), map: "DF__Alquiler__FechaC__0E6E26BF") @db.DateTime
+  Clientes        Clientes       @relation(fields: [ClienteId], references: [Id], onUpdate: NoAction, map: "FK_Alquiler_Cliente")
+  Empleados       Empleados      @relation(fields: [EmpleadoId], references: [Id], onUpdate: NoAction, map: "FK_Alquiler_Empleado")
+  Vehiculos       Vehiculos      @relation(fields: [VehiculoId], references: [Id], onUpdate: NoAction, map: "FK_Alquiler_Vehiculo")
+  Inspecciones    Inspecciones[]
 }
 
-model Brand {
-  id          Int       @id @default(autoincrement())
-  description String    @db.VarChar(100)
-  status      String    @db.VarChar(20)
-  models      Model[]
-  vehicles    Vehicle[]
-
-  @@index([description])
+model Clientes {
+  Id             Int        @id(map: "PK__Clientes__3214EC07FFC9517A") @default(autoincrement())
+  Cedula         String     @unique(map: "UQ__Clientes__B4ADFE38AFF64026") @db.VarChar(20)
+  Nombre         String     @db.VarChar(100)
+  Apellido       String     @db.VarChar(100)
+  Telefono       String?    @db.VarChar(20)
+  Email          String?    @db.VarChar(100)
+  Direccion      String?    @db.VarChar(255)
+  LicenciaNumero String?    @db.VarChar(50)
+  Estado         Boolean    @default(true, map: "DF__Clientes__Estado__09A971A2")
+  FechaRegistro  DateTime   @default(now(), map: "DF__Clientes__FechaR__0A9D95DB") @db.Date
+  Alquiler       Alquiler[]
 }
 
-model Model {
-  id          Int       @id @default(autoincrement())
-  brandId     Int
-  description String    @db.VarChar(100)
-  status      String    @db.VarChar(20)
-  brand       Brand     @relation(fields: [brandId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  vehicles    Vehicle[]
-
-  @@index([description])
+model Combustibles {
+  Id          Int         @id(map: "PK__Combusti__3214EC07020FC064") @default(autoincrement())
+  Descripcion String      @db.VarChar(50)
+  Estado      Boolean     @default(true, map: "DF__Combustib__Estad__6FE99F9F")
+  Vehiculos   Vehiculos[]
 }
 
-model FuelType {
-  id          Int       @id @default(autoincrement())
-  description String    @db.VarChar(100)
-  status      String    @db.VarChar(20)
-  vehicles    Vehicle[]
-
-  @@index([description])
+model Empleados {
+  Id           Int            @id(map: "PK__Empleado__3214EC07CC576E1E") @default(autoincrement())
+  Cedula       String         @unique(map: "UQ__Empleado__B4ADFE38E6F2B3D9") @db.VarChar(20)
+  Nombre       String         @db.VarChar(100)
+  Apellido     String         @db.VarChar(100)
+  Telefono     String?        @db.VarChar(20)
+  Email        String?        @db.VarChar(100)
+  Cargo        String?        @db.VarChar(100)
+  Estado       Boolean        @default(true, map: "DF__Empleados__Estad__04E4BC85")
+  FechaAlta    DateTime       @default(now(), map: "DF__Empleados__Fecha__05D8E0BE") @db.Date
+  Alquiler     Alquiler[]
+  Inspecciones Inspecciones[]
 }
 
-model Vehicle {
-  id            Int          @id @default(autoincrement())
-  description   String       @db.VarChar(255)
-  chassisNumber String       @db.VarChar(50)
-  engineNumber  String       @db.VarChar(50)
-  plateNumber   String       @db.VarChar(20)
-  vehicleTypeId Int
-  brandId       Int
-  modelId       Int
-  fuelTypeId    Int
-  status        String       @db.VarChar(20)
-  inspections   Inspection[]
-  rents         Rent[]
-  brand         Brand        @relation(fields: [brandId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  fuelType      FuelType     @relation(fields: [fuelTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  model         Model        @relation(fields: [modelId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  vehicleType   VehicleType  @relation(fields: [vehicleTypeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+model Inspecciones {
+  Id              Int       @id(map: "PK__Inspecci__3214EC075FF8AFC1") @default(autoincrement())
+  AlquilerId      Int
+  VehiculoId      Int
+  EmpleadoId      Int
+  TipoInspeccion  String    @db.VarChar(20)
+  NivelCombust    String?   @db.VarChar(20)
+  KilometrajeKm   Int?
+  TieneRayones    Boolean   @default(false, map: "DF__Inspeccio__Tiene__14270015")
+  TieneGolpes     Boolean   @default(false, map: "DF__Inspeccio__Tiene__151B244E")
+  TieneRoturas    Boolean   @default(false, map: "DF__Inspeccio__Tiene__160F4887")
+  Observaciones   String?   @db.VarChar(500)
+  FechaInspeccion DateTime  @default(now(), map: "DF__Inspeccio__Fecha__17036CC0") @db.DateTime
+  Alquiler        Alquiler  @relation(fields: [AlquilerId], references: [Id], onUpdate: NoAction, map: "FK_Inspecciones_Alquiler")
+  Empleados       Empleados @relation(fields: [EmpleadoId], references: [Id], onUpdate: NoAction, map: "FK_Inspecciones_Empleado")
+  Vehiculos       Vehiculos @relation(fields: [VehiculoId], references: [Id], onUpdate: NoAction, map: "FK_Inspecciones_Vehiculo")
 }
 
-model Customer {
-  id          Int          @id @default(autoincrement())
-  name        String       @db.VarChar(100)
-  documentId  String       @unique @db.VarChar(20)
-  creditCard  String       @db.VarChar(20)
-  creditLimit Float
-  personType  String       @db.VarChar(20)
-  status      String       @db.VarChar(20)
-  inspections Inspection[]
-  rents       Rent[]
+model Marcas {
+  Id      Int       @id(map: "PK__Marcas__3214EC07BDD60316") @default(autoincrement())
+  Nombre  String    @db.VarChar(100)
+  Estado  Boolean   @default(true, map: "DF__Marcas__Estado__72C60C4A")
+  Modelos Modelos[]
 }
 
-model Role {
-  id        Int        @id @default(autoincrement())
-  name      String     @unique @db.VarChar(50)
-  employees Employee[]
+model Modelos {
+  Id             Int           @id(map: "PK__Modelos__3214EC078911C51F") @default(autoincrement())
+  Nombre         String        @db.VarChar(100)
+  MarcaId        Int
+  TipoVehiculoId Int
+  Estado         Boolean       @default(true, map: "DF__Modelos__Estado__787EE5A0")
+  Marcas         Marcas        @relation(fields: [MarcaId], references: [Id], onUpdate: NoAction, map: "FK_Modelos_Marca")
+  TipoVehiculos  TipoVehiculos @relation(fields: [TipoVehiculoId], references: [Id], onUpdate: NoAction, map: "FK_Modelos_TipoVehiculo")
+  Vehiculos      Vehiculos[]
 }
 
-model Employee {
-  id            Int          @id @default(autoincrement())
-  name          String       @db.VarChar(100)
-  documentId    String       @unique @db.VarChar(20)
-  workShift     String       @db.VarChar(20)
-  commissionPct Float
-  hireDate      DateTime     @default(now())
-  status        String       @db.VarChar(20)
-  roleId        Int
-  email         String       @unique @db.VarChar(100)
-  password      String       @db.VarChar(255)
-  role          Role         @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  inspections   Inspection[]
-  rents         Rent[]
+model TipoVehiculos {
+  Id          Int       @id(map: "PK__TipoVehi__3214EC070684309E") @default(autoincrement())
+  Descripcion String    @db.VarChar(100)
+  Estado      Boolean   @default(true, map: "DF__TipoVehic__Estad__75A278F5")
+  Modelos     Modelos[]
 }
 
-model Inspection {
-  id             Int      @id @default(autoincrement())
-  transactionId  Int
-  vehicleId      Int
-  customerId     Int
-  scratches      Boolean  @default(false)
-  fuelAmount     String   @db.VarChar(20)
-  hasSpareTire   Boolean  @default(false)
-  hasJack        Boolean  @default(false)
-  hasGlassDamage Boolean  @default(false)
-  tireStatus     String   @db.VarChar(50)
-  inspectionDate DateTime @default(now())
-  employeeId     Int
-  status         String   @db.VarChar(20)
-  customer       Customer @relation(fields: [customerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  employee       Employee @relation(fields: [employeeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  vehicle        Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-}
-
-model Rent {
-  id         Int      @id @default(autoincrement())
-  employeeId Int
-  vehicleId  Int
-  customerId Int
-  rentDate   DateTime @default(now())
-  returnDate DateTime
-  dailyRate  Float
-  days       Int
-  comments   String?  @db.VarChar(500)
-  status     String   @db.VarChar(20)
-  customer   Customer @relation(fields: [customerId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  vehicle    Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@index([vehicleId])
-}
-
-model User {
-  id        String   @id @default(uuid())
-  name      String   @db.VarChar(100)
-  email     String   @unique @db.VarChar(100)
-  createdAt DateTime @default(now())
+model Vehiculos {
+  Id            Int            @id(map: "PK__Vehiculo__3214EC073112303C") @default(autoincrement())
+  Placa         String         @unique(map: "UQ__Vehiculo__8310F99D889DB406") @db.VarChar(20)
+  ModeloId      Int
+  CombustibleId Int
+  Anio          Int
+  Color         String         @db.VarChar(50)
+  NoChasis      String         @db.VarChar(50)
+  NoMotor       String         @db.VarChar(50)
+  PrecioPorDia  Decimal        @db.Decimal(10, 2)
+  Disponible    Boolean        @default(true, map: "DF__Vehiculos__Dispo__7E37BEF6")
+  Estado        Boolean        @default(true, map: "DF__Vehiculos__Estad__7F2BE32F")
+  Alquiler      Alquiler[]
+  Inspecciones  Inspecciones[]
+  Combustibles  Combustibles   @relation(fields: [CombustibleId], references: [Id], onUpdate: NoAction, map: "FK_Vehiculos_Combustible")
+  Modelos       Modelos        @relation(fields: [ModeloId], references: [Id], onUpdate: NoAction, map: "FK_Vehiculos_Modelo")
 }
