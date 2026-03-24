@@ -6,11 +6,11 @@ import BorrarAlquiler from './borraralquiler';
 import { ActualizarAlquiler } from './actualizaralquiler';
 
 export default async function page() {
-    // datos de las marcas
-    const alquiler = await prisma.rent.findMany();
-    const empleados = await prisma.employee.findMany();
-    const clientes = await prisma.customer.findMany();
-    const vehiculos = await prisma.vehicle.findMany();
+
+const alquiler = await prisma.rent.findMany();
+const empleados = await prisma.employee.findMany();
+const clientes = await prisma.customer.findMany();
+const vehiculos = await prisma.vehicle.findMany();
     
     return (
         <div className='w-full space-y-4'>
@@ -47,7 +47,7 @@ export default async function page() {
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 ">{alquiler.id}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{empleados.find(empleado => empleado.id === alquiler.employeeId)?.name}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.status}</td>
-                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{vehiculos.find(vehiculo => vehiculo.id === alquiler.vehicleId)?.description}</td>
+                                            <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{vehiculos.find(vehiculo => vehiculo.id === alquiler.vehicleId)?.placa}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{clientes.find(cliente => cliente.id === alquiler.customerId)?.name}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.rentDate.toLocaleDateString()}</td>
                                             <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900">{alquiler.returnDate.toLocaleDateString()}</td>

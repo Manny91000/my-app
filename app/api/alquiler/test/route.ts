@@ -1,22 +1,18 @@
-import { PrismaClient } from '@prisma/client'
+import { prisma } from '@/prisma/prisma.config'
 import { NextResponse } from 'next/server'
 
-const prisma = new PrismaClient()
-
 export async function GET() {
-  // Leer datos
-  const combustibles = await prisma.combustibles.findMany()
+  const combustibles = await prisma.fuelType.findMany()
   return NextResponse.json({ ok: true, datos: combustibles })
 }
 
 export async function POST() {
-  // Insertar dato de prueba
-  const nuevo = await prisma.clientes.create({
+  const nuevo = await prisma.customer.create({
     data: {
-      Cedula: '001-0000001-1',
-      Nombre: 'Cliente',
-      Apellido: 'Prueba',
-      Estado: true,
+      cedula: '001-0000001-1',
+      name: 'Cliente',
+      apellido: 'Prueba',
+      status: true,
     }
   })
   return NextResponse.json({ ok: true, cliente: nuevo })
