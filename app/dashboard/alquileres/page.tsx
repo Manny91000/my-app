@@ -1,5 +1,5 @@
 
-import { prisma } from '@/prisma/prisma.config'
+import { prisma } from "@/prisma/prisma.config"; 
 import React from 'react'
 import { AddAlquiler } from './addalquiler';
 import BorrarAlquiler from './borraralquiler';
