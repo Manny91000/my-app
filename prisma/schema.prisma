@@ -17,8 +17,8 @@ model Rent {
   returnDate  DateTime     @map("FechaFin")
   dailyRate   Float        @map("PrecioPorDia")
   days        Int          @map("TotalDias")
-  comments    String?      @db.VarChar(500) @map("Comentarios")
-  status      String       @db.VarChar(20) @map("Estado")
+  comments    String?      @map("Comentarios") @db.VarChar(500)
+  status      String       @map("Estado") @db.VarChar(20)
   customer    Customer     @relation(fields: [customerId], references: [id], onUpdate: NoAction)
   employee    Employee     @relation(fields: [employeeId], references: [id], onUpdate: NoAction)
   vehicle     Vehicle      @relation(fields: [vehicleId], references: [id], onUpdate: NoAction)
@@ -29,15 +29,15 @@ model Rent {
 
 model Customer {
   id          Int          @id @default(autoincrement()) @map("Id")
-  cedula      String       @unique @db.VarChar(20) @map("Cedula")
-  name        String       @db.VarChar(100) @map("Nombre")
-  apellido    String       @db.VarChar(100) @map("Apellido")
-  telefono    String?      @db.VarChar(20) @map("Telefono")
-  email       String?      @db.VarChar(100) @map("Email")
-  direccion   String?      @db.VarChar(255) @map("Direccion")
-  licencia    String?      @db.VarChar(50) @map("LicenciaNumero")
+  cedula      String       @unique @map("Cedula") @db.VarChar(20)
+  name        String       @map("Nombre") @db.VarChar(100)
+  apellido    String       @map("Apellido") @db.VarChar(100)
+  telefono    String?      @map("Telefono") @db.VarChar(20)
+  email       String?      @map("Email") @db.VarChar(100)
+  direccion   String?      @map("Direccion") @db.VarChar(255)
+  licencia    String?      @map("LicenciaNumero") @db.VarChar(50)
   status      Boolean      @default(true) @map("Estado")
-  createdAt   DateTime     @default(now()) @db.Date @map("FechaRegistro")
+  createdAt   DateTime     @default(now()) @map("FechaRegistro") @db.Date
   rents       Rent[]
   inspections Inspection[]
 
@@ -46,7 +46,7 @@ model Customer {
 
 model FuelType {
   id          Int       @id @default(autoincrement()) @map("Id")
-  description String    @db.VarChar(50) @map("Descripcion")
+  description String    @map("Descripcion") @db.VarChar(50)
   status      Boolean   @default(true) @map("Estado")
   vehicles    Vehicle[]
 
@@ -55,16 +55,18 @@ model FuelType {
 
 model Employee {
   id          Int          @id @default(autoincrement()) @map("Id")
-  cedula      String       @unique @db.VarChar(20) @map("Cedula")
-  name        String       @db.VarChar(100) @map("Nombre")
-  apellido    String       @db.VarChar(100) @map("Apellido")
-  telefono    String?      @db.VarChar(20) @map("Telefono")
-  email       String?      @db.VarChar(100) @map("Email")
-  cargo       String?      @db.VarChar(100) @map("Cargo")
+  cedula      String       @unique @map("Cedula") @db.VarChar(20)
+  name        String       @map("Nombre") @db.VarChar(100)
+  apellido    String       @map("Apellido") @db.VarChar(100)
+  telefono    String?      @map("Telefono") @db.VarChar(20)
+  email       String?      @map("Email") @db.VarChar(100)
+  cargo       String?      @map("Cargo") @db.VarChar(100)
   status      Boolean      @default(true) @map("Estado")
-  hireDate    DateTime     @default(now()) @db.Date @map("FechaAlta")
+  hireDate    DateTime     @default(now()) @map("FechaAlta") @db.Date
   rents       Rent[]
   inspections Inspection[]
+  role        Role?        @relation(fields: [roleId], references: [id])
+  roleId      Int?
 
   @@map("Empleados")
 }
@@ -75,15 +77,15 @@ model Inspection {
   vehicleId      Int      @map("VehiculoId")
   employeeId     Int      @map("EmpleadoId")
   customerId     Int      @map("ClienteId")
-  tipoInspeccion String   @db.VarChar(20) @map("TipoInspeccion")
-  nivelCombust   String?  @db.VarChar(20) @map("NivelCombust")
+  tipoInspeccion String   @map("TipoInspeccion") @db.VarChar(20)
+  nivelCombust   String?  @map("NivelCombust") @db.VarChar(20)
   kilometrajeKm  Int?     @map("KilometrajeKm")
   tieneRayones   Boolean  @default(false) @map("TieneRayones")
   tieneGolpes    Boolean  @default(false) @map("TieneGolpes")
   tieneRoturas   Boolean  @default(false) @map("TieneRoturas")
-  observaciones  String?  @db.VarChar(500) @map("Observaciones")
+  observaciones  String?  @map("Observaciones") @db.VarChar(500)
   inspectionDate DateTime @default(now()) @map("FechaInspeccion")
-  status         String   @db.VarChar(20) @map("Estado")
+  status         String   @map("Estado") @db.VarChar(20)
   rent           Rent     @relation(fields: [rentId], references: [id], onUpdate: NoAction)
   employee       Employee @relation(fields: [employeeId], references: [id], onUpdate: NoAction)
   vehicle        Vehicle  @relation(fields: [vehicleId], references: [id], onUpdate: NoAction)
@@ -94,7 +96,7 @@ model Inspection {
 
 model Brand {
   id          Int       @id @default(autoincrement()) @map("Id")
-  description String    @db.VarChar(100) @map("Nombre")
+  description String    @map("Nombre") @db.VarChar(100)
   status      Boolean   @default(true) @map("Estado")
   models      Model[]
   vehicles    Vehicle[]
@@ -104,7 +106,7 @@ model Brand {
 
 model Model {
   id            Int         @id @default(autoincrement()) @map("Id")
-  name          String      @db.VarChar(100) @map("Nombre")
+  name          String      @map("Nombre") @db.VarChar(100)
   brandId       Int         @map("MarcaId")
   vehicleTypeId Int         @map("TipoVehiculoId")
   status        Boolean     @default(true) @map("Estado")
@@ -117,7 +119,7 @@ model Model {
 
 model VehicleType {
   id          Int       @id @default(autoincrement()) @map("Id")
-  description String    @db.VarChar(100) @map("Descripcion")
+  description String    @map("Descripcion") @db.VarChar(100)
   status      Boolean   @default(true) @map("Estado")
   models      Model[]
   vehicles    Vehicle[]
@@ -127,16 +129,16 @@ model VehicleType {
 
 model Vehicle {
   id            Int          @id @default(autoincrement()) @map("Id")
-  placa         String       @unique @db.VarChar(20) @map("Placa")
+  placa         String       @unique @map("Placa") @db.VarChar(20)
   modelId       Int          @map("ModeloId")
   brandId       Int          @map("BrandId")
   vehicleTypeId Int          @map("TipoVehiculoId")
   fuelTypeId    Int          @map("CombustibleId")
   anio          Int          @map("Anio")
-  color         String       @db.VarChar(50) @map("Color")
-  noChasis      String       @db.VarChar(50) @map("NoChasis")
-  noMotor       String       @db.VarChar(50) @map("NoMotor")
-  dailyRate     Decimal      @db.Decimal(10, 2) @map("PrecioPorDia")
+  color         String       @map("Color") @db.VarChar(50)
+  noChasis      String       @map("NoChasis") @db.VarChar(50)
+  noMotor       String       @map("NoMotor") @db.VarChar(50)
+  dailyRate     Decimal      @map("PrecioPorDia") @db.Decimal(10, 2)
   available     Boolean      @default(true) @map("Disponible")
   status        Boolean      @default(true) @map("Estado")
   rents         Rent[]
@@ -147,4 +149,10 @@ model Vehicle {
   vehicleType   VehicleType  @relation(fields: [vehicleTypeId], references: [id], onUpdate: NoAction)
 
   @@map("Vehiculos")
+}
+
+model Role {
+  id        Int        @id @default(autoincrement())
+  name      String
+  employees Employee[]
 }
