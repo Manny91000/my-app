@@ -1,4 +1,19 @@
-import { Calendar, Home, Inbox, Search, Settings,} from "lucide-react"
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  Car,
+  CircleDollarSign,
+  ClipboardList,
+  FileBarChart2,
+  Fuel,
+  LayoutDashboard,
+  Settings,
+  ShieldCheck,
+  Tags,
+  Users,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -9,29 +24,34 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 // Menu items.
 const items = [
   {
+    title: "Resumen",
+    url: "/dashboard",
+    icon: LayoutDashboard,
+  },
+  {
     title: "Alquiler",
     url: "/dashboard/alquileres",
-    icon: Home,
+    icon: CircleDollarSign,
   },
   {
     title: "Empleados",
     url: "/dashboard/empleados",
-    icon: Inbox,
+    icon: ShieldCheck,
   },
   {
     title: "Vehiculos",
     url: "/dashboard/vehiculos",
-    icon: Calendar,
+    icon: Car,
   },
   {
     title: "Tipo de Vehiculos",
     url: "/dashboard/tipodevehiculos",
-    icon: Search,
+    icon: Tags,
   },
   {
     title: "Modelos",
@@ -41,46 +61,51 @@ const items = [
   {
     title: "Combustibles",
     url: "/dashboard/combustibles",
-    icon: Calendar,
+    icon: Fuel,
   },
   {
     title: "Clientes",
     url: "/dashboard/clientes",
-    icon: Calendar,
+    icon: Users,
   },
   {
     title: "Marcas",
     url: "/dashboard/marcas",
-    icon: Calendar,
+    icon: ClipboardList,
   },
   {
     title: "Inspecciones",
     url: "/dashboard/inspecciones",
-    icon: Calendar,
+    icon: ShieldCheck,
   },
   {
     title: "Reportes",
     url: "/dashboard/reportes",
-    icon: Calendar,
-  }
+    icon: FileBarChart2,
+  },
 ];
 
 export function AppSidebar() {
+  const pathname = usePathname();
+
   return (
-    <Sidebar>
+    <Sidebar className="border-r border-slate-200 bg-white/90 backdrop-blur">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>Centro de operaciones</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={item.url === "/dashboard" ? pathname === item.url : pathname.startsWith(item.url)}
+                  >
+                    <Link href={item.url}>
                       <item.icon />
 
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -89,6 +114,6 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }
 

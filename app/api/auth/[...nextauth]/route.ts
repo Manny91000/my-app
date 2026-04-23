@@ -4,7 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 const handlers = NextAuth(
     {
         pages:{
-            signIn: '/Signin',
+            signIn: '/signin',
             signOut: '/logout',
             error: '/error',
 
